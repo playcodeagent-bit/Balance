@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Gift Codes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #4285F4;
+            --primary-dark: #3367D6;
+            --secondary: #34A853;
+            --secondary-dark: #2E8B57;
+            --accent: #FBBC05;
+            --accent-dark: #F9AB00;
+            --danger: #EA4335;
+            --danger-dark: #D33426;
+            --dark: #202124;
+            --dark-light: #3C4043;
+            --light: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E8EAED;
+            --text: #202124;
+            --text-light: #5F6368;
+            --shadow: 0 1px 2px rgba(60,64,67,0.3), 0 2px 6px rgba(60,64,67,0.15);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: var(--light);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--danger));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .logo-text span {
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            background-color: rgba(66, 133, 244, 0.08);
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 12px;
+            right: 12px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(66, 133, 244, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: var(--transition);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 60px 0;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 32px 24px;
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            background-color: rgba(66, 133, 244, 0.1);
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+        
+        /* Codes Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-header h2 {
+            font-size: 28px;
+            color: var(--dark);
+        }
+        
+        .codes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        
+        .code-card {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        .code-type {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .code-value {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--secondary);
+            background-color: rgba(52, 168, 83, 0.1);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin: 15px 0;
+            letter-spacing: 1px;
+            border: 1px dashed rgba(52, 168, 83, 0.3);
+        }
+        
+        .code-validity {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        /* Balance Checker Section */
+        .balance-checker {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .balance-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .balance-header h2 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .balance-header p {
+            color: var(--text-light);
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 24px;
+            text-align: left;
+            border-radius: var(--radius-sm);
+            background-color: white;
+            border: 1px solid var(--medium-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+        
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .action-text h3 {
+            font-size: 17px;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+        
+        .action-text p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .email-preview {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+        
+        .email-preview h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .email-detail {
+            margin-bottom: 12px;
+        }
+        
+        .email-detail strong {
+            display: inline-block;
+            width: 60px;
+            color: var(--text-light);
+        }
+        
+        .email-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .instructions {
+            background-color: rgba(66, 133, 244, 0.05);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .instructions h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            color: var(--text-light);
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+        }
+        
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--medium-gray);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="logo-text">Google <span>Play Codes</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-section="codes">Gift Codes</a></li>
+                    <li><a href="#" class="nav-link" data-section="balance">Account Manager</a></li>
+                    <li><a href="#" class="nav-link" id="contactLink">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Section -->
+            <section id="homeSection" class="section active">
+                <div class="hero">
+                    <h1>Redeem Google Play Gift Codes</h1>
+                    <p>Unlock premium apps, games, movies, and more with our verified Google Play gift codes. Get access to exclusive content with daily updated codes.</p>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="getCodeBtn">
+                            <i class="fas fa-gift"></i> Get Free Code
+                        </button>
+                        <button class="btn btn-secondary" id="manageBtn">
+                            <i class="fas fa-user-circle"></i> Manage Account
+                        </button>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h3>Daily Updates</h3>
+                        <p>Fresh codes added every 24 hours to ensure you always have access to working Google Play codes.</p>
+                    </div>
+                    
+                    <div class="card feature-card">
+                        <div class="feature-icon" style="background-color: rgba(52, 168, 83, 0.1); color: var(--secondary);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>100% Verified</h3>
+                        <p>All codes are thoroughly tested before listing to guarantee they work perfectly for you.</p>
+                    </div>
+                    
+                    <div class="card feature-card">
+                        <div class="feature-icon" style="background-color: rgba(251, 188, 5, 0.1); color: var(--accent);">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Global Access</h3>
+                        <p>Codes work worldwide, so no matter your location, you can enjoy premium content.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Codes Section -->
+            <section id="codesSection" class="section">
+                <div class="section-header">
+                    <h2>Available Gift Codes</h2>
+                    <div class="btn btn-secondary">
+                        <i class="fas fa-history"></i> Updated: Today
+                    </div>
+                </div>
+                
+                <div class="codes-grid">
+                    <div class="card code-card">
+                        <div class="code-type">Premium App</div>
+                        <div class="code-value">GP-8X9Y2-Z3K4M</div>
+                        <div class="code-validity">Valid for 7 days</div>
+                    </div>
+                    
+                    <div class="card code-card">
+                        <div class="code-type">Game Purchase</div>
+                        <div class="code-value">GP-N5P6Q-R7S8T</div>
+                        <div class="code-validity">Valid for 5 days</div>
+                    </div>
+                    
+                    <div class="card code-card">
+                        <div class="code-type">Movie Rental</div>
+                        <div class="code-value">GP-U1V2W-X3Y4Z</div>
+                        <div class="code-validity">Valid for 3 days</div>
+                    </div>
+                    
+                    <div class="card code-card">
+                        <div class="code-type">Music Subscription</div>
+                        <div class="code-value">GP-A5B6C-D7E8F</div>
+                        <div class="code-validity">Valid for 14 days</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Balance Checker Section -->
+            <section id="balanceSection" class="section">
+                <div class="balance-checker">
+                    <div class="balance-header">
+                        <h2>Account Manager</h2>
+                        <p>Manage your Google Play account and redeem codes</p>
+                    </div>
+                    
+                    <div class="action-grid">
+                        <button class="action-btn" onclick="checkBalance()">
+                            <div class="action-icon" style="background-color: var(--secondary);">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="action-text">
+                                <h3>Check Balance</h3>
+                                <p>View your current account balance</p>
+                            </div>
+                        </button>
+                        
+                        <button class="action-btn" onclick="addMoney()">
+                            <div class="action-icon" style="background-color: var(--primary);">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div class="action-text">
+                                <h3>Add Money</h3>
+                                <p>Add funds to your account</p>
+                            </div>
+                        </button>
+                        
+                        <button class="action-btn" onclick="needCode()">
+                            <div class="action-icon" style="background-color: var(--accent);">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="action-text">
+                                <h3>Need Code</h3>
+                                <p>Request a new gift code</p>
+                            </div>
+                        </button>
+                        
+                        <button class="action-btn" onclick="chatWithAgent()">
+                            <div class="action-icon" style="background-color: var(--danger);">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="action-text">
+                                <h3>Chat with Agent</h3>
+                                <p>Get help from our support team</p>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="email-preview" id="emailPreview">
+                        <h3><i class="fas fa-envelope"></i> Email Template Ready</h3>
+                        <div class="email-detail">
+                            <strong>To:</strong> <span id="previewTo"></span>
+                        </div>
+                        <div class="email-detail">
+                            <strong>Subject:</strong> <span id="previewSubject"></span>
+                        </div>
+                        <div class="email-detail">
+                            <strong>Body:</strong> <span id="previewBody"></span>
+                        </div>
+                        <div class="email-actions">
+                            <button class="btn btn-primary" onclick="openEmailInNewTab()">
+                                <i class="fas fa-paper-plane"></i> Open Email
+                            </button>
+                            <button class="btn btn-outline" onclick="copyEmailDetails()">
+                                <i class="fas fa-copy"></i> Copy Details
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions">
+                        <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                        <ul>
+                            <li>Click any action button to generate an email template</li>
+                            <li>Use "Open Email" to open a pre-filled email in a new tab</li>
+                            <li>Use "Copy Details" to paste into your own email client</li>
+                            <li>For "Chat with Agent", enter code: <strong>6215</strong></li>
+                            <li>For "Need Code", use passwords: 6215, 2323, 6969, 7869</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="agentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Enter Agent Code</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="agentCode">4-digit Code</label>
+                    <input type="number" id="agentCode" class="form-control" placeholder="Enter 4-digit code" pattern="[0-9]*" inputmode="numeric">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeAgentModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="verifyAgentCode()">Verify Code</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="addMoneyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Money to Account</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="moneyAmount">Amount (₹)</label>
+                    <input type="number" id="moneyAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeAddMoneyModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmAddMoney()">Add Money</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="needCodeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request Gift Code</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="redeemAmount">Redeem Amount (₹)</label>
+                    <input type="number" id="redeemAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label for="needCodePassword">Password</label>
+                    <input type="password" id="needCodePassword" class="form-control" placeholder="Enter 4-digit password" pattern="[0-9]*" inputmode="numeric">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeNeedCodeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmNeedCode()">Get Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Email template ready!
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+                </div>
+                <p class="copyright">© 2025 Google Play Gift Codes. This site is affiliated with Google LLC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentEmailData = {};
+        const validPasswords = ['6215', '2323', '6969', '7869'];
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation functionality
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-link').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show selected section
+                    showSection(section);
+                });
+            });
+            
+            // Get Code button functionality
+            document.getElementById('getCodeBtn').addEventListener('click', function() {
+                document.querySelector('[data-section="codes"]').click();
+            });
+            
+            // Manage button functionality
+            document.getElementById('manageBtn').addEventListener('click', function() {
+                document.querySelector('[data-section="balance"]').click();
+            });
+            
+            // Contact link
+            document.getElementById('contactLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                currentEmailData = {
+                    to: 'playcodeagent@gmail.com',
+                    subject: 'Contact Request - Google Play Codes',
+                    body: 'Hello, I would like to contact you regarding Google Play codes.'
+                };
+                
+                showEmailPreview();
+                showNotification('Contact email template ready!');
+            });
+            
+            // Close modals on outside click
+            window.addEventListener('click', function(event) {
+                const modals = ['agentModal', 'addMoneyModal', 'needCodeModal'];
+                modals.forEach(modalId => {
+                    const modal = document.getElementById(modalId);
+                    if (event.target === modal) {
+                        closeModal(modalId);
+                    }
+                });
+            });
+        });
+        
+        // Show section function
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Balance Checker Functions
+        function checkBalance() {
+            currentEmailData = {
+                to: 'playcodeagent@gmail.com',
+                subject: 'Balance Check Request',
+                body: 'Hello, I would like to check my Google Play account balance.'
+            };
+            showEmailPreview();
+            showNotification('Balance check email template ready!');
+        }
+        
+        function addMoney() {
+            document.getElementById('addMoneyModal').style.display = 'flex';
+        }
+        
+        function confirmAddMoney() {
+            const amount = document.getElementById('moneyAmount').value;
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount');
+                return;
+            }
+            
+            currentEmailData = {
+                to: 'playcodeagent@gmail.com',
+                subject: 'Add Money Request',
+                body: `I would like to add ₹${amount} to my Google Play account.`
+            };
+            
+            showEmailPreview();
+            showNotification('Add money email template ready!');
+            closeAddMoneyModal();
+        }
+        
+        function closeAddMoneyModal() {
+            document.getElementById('addMoneyModal').style.display = 'none';
+            document.getElementById('moneyAmount').value = '';
+        }
+        
+        function needCode() {
+            document.getElementById('needCodeModal').style.display = 'flex';
+        }
+        
+        function confirmNeedCode() {
+            const amount = document.getElementById('redeemAmount').value;
+            const password = document.getElementById('needCodePassword').value;
+            
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount');
+                return;
+            }
+            
+            if (!password) {
+                showNotification('Please enter the password');
+                return;
+            }
+            
+            if (!validPasswords.includes(password)) {
+                showNotification('Invalid password. Please try again.');
+                document.getElementById('needCodePassword').value = '';
+                return;
+            }
+            
+            currentEmailData = {
+                to: 'playcodeagent@gmail.com',
+                subject: 'Gift Code Request',
+                body: `I would like to request a Google Play gift code worth ₹${amount}.`
+            };
+            
+            showEmailPreview();
+            showNotification('Gift code request email template ready!');
+            closeNeedCodeModal();
+        }
+        
+        function closeNeedCodeModal() {
+            document.getElementById('needCodeModal').style.display = 'none';
+            document.getElementById('redeemAmount').value = '';
+            document.getElementById('needCodePassword').value = '';
+        }
+        
+        function chatWithAgent() {
+            document.getElementById('agentModal').style.display = 'flex';
+        }
+        
+        function closeAgentModal() {
+            document.getElementById('agentModal').style.display = 'none';
+            document.getElementById('agentCode').value = '';
+        }
+        
+        function verifyAgentCode() {
+            const agentCode = document.getElementById('agentCode').value;
+            
+            if (agentCode === '6215') {
+                currentEmailData = {
+                    to: 's.teachgamingstiyle@gmail.com',
+                    subject: 'Chat with Agent Request',
+                    body: 'Hello, I would like to chat with an agent about Google Play codes.'
+                };
+                
+                showEmailPreview();
+                showNotification('Chat agent email template ready!');
+                closeAgentModal();
+            } else {
+                showNotification('Invalid code. Please try again.');
+                document.getElementById('agentCode').value = '';
+            }
+        }
+        
+        function showEmailPreview() {
+            document.getElementById('previewTo').textContent = currentEmailData.to;
+            document.getElementById('previewSubject').textContent = currentEmailData.subject;
+            document.getElementById('previewBody').textContent = currentEmailData.body;
+            document.getElementById('emailPreview').style.display = 'block';
+            
+            // Scroll to email preview
+            document.getElementById('emailPreview').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }
+        
+        function openEmailInNewTab() {
+            const { to, subject, body } = currentEmailData;
+            
+            // Create a simple HTML page with a mailto link
+            const emailPage = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Email Template - Google Play Codes</title>
+                    <style>
+                        body {
+                            font-family: 'Google Sans', sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-height: 100vh;
+                            background-color: #f5f5f5;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        .container {
+                            background: white;
+                            padding: 30px;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                            max-width: 500px;
+                            width: 100%;
+                        }
+                        h1 {
+                            color: #202124;
+                            margin-bottom: 20px;
+                            font-size: 24px;
+                        }
+                        .email-details {
+                            background: #f8f9fa;
+                            padding: 20px;
+                            border-radius: 8px;
+                            margin: 20px 0;
+                            border-left: 4px solid #4285F4;
+                        }
+                        .btn {
+                            display: inline-block;
+                            background-color: #4285F4;
+                            color: white;
+                            text-decoration: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            margin: 10px 5px;
+                            transition: background-color 0.2s;
+                        }
+                        .btn:hover {
+                            background-color: #3367D6;
+                        }
+                        .btn-secondary {
+                            background-color: #5F6368;
+                        }
+                        .btn-secondary:hover {
+                            background-color: #3C4043;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Email Template Ready</h1>
+                        <div class="email-details">
+                            <p><strong>To:</strong> ${to}</p>
+                            <p><strong>Subject:</strong> ${subject}</p>
+                            <p><strong>Body:</strong> ${body}</p>
+                        </div>
+                        <p>Click the button below to open in your email client:</p>
+                        <a href="mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="btn">
+                            Open in Email Client
+                        </a>
+                        <button onclick="window.close()" class="btn btn-secondary">
+                            Close Tab
+                        </button>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Open a new tab with the email template
+            const newTab = window.open();
+            newTab.document.write(emailPage);
+            newTab.document.close();
+            
+            showNotification('Email template opened in new tab!');
+        }
+        
+        function copyEmailDetails() {
+            const { to, subject, body } = currentEmailData;
+            const emailText = `To: ${to}\nSubject: ${subject}\nBody: ${body}`;
+            
+            navigator.clipboard.writeText(emailText)
+                .then(() => {
+                    showNotification('Email details copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy to clipboard');
+                });
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            // Reset inputs
+            const inputs = document.querySelectorAll(`#${modalId} input`);
+            inputs.forEach(input => input.value = '');
+        }
+        
+        // Allow pressing Enter in modal inputs
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('agentModal').style.display === 'flex') {
+                    verifyAgentCode();
+                } else if (document.getElementById('addMoneyModal').style.display === 'flex') {
+                    confirmAddMoney();
+                } else if (document.getElementById('needCodeModal').style.display === 'flex') {
+                    confirmNeedCode();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
