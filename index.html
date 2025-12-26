@@ -11,24 +11,32 @@
         :root {
             --primary: #4285F4;
             --primary-dark: #3367D6;
+            --primary-light: #E8F0FE;
             --secondary: #34A853;
             --secondary-dark: #2E8B57;
+            --secondary-light: #E6F4EA;
             --accent: #FBBC05;
             --accent-dark: #F9AB00;
+            --accent-light: #FEF7E0;
             --danger: #EA4335;
             --danger-dark: #D33426;
+            --danger-light: #FDECEA;
             --dark: #202124;
             --dark-light: #3C4043;
             --light: #FFFFFF;
             --light-gray: #F8F9FA;
             --medium-gray: #E8EAED;
+            --border-gray: #DADCE0;
             --text: #202124;
             --text-light: #5F6368;
+            --text-lighter: #80868B;
             --shadow: 0 1px 2px rgba(60,64,67,0.3), 0 2px 6px rgba(60,64,67,0.15);
             --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --radius: 12px;
+            --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
             --radius-sm: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         /* Base Styles */
@@ -40,10 +48,11 @@
         
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--light-gray);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         h1, h2, h3, h4, h5 {
@@ -54,94 +63,104 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
         
         /* Header & Navigation */
         header {
             background-color: var(--light);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
         }
         
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            padding: 18px 0;
         }
         
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
         }
         
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--danger));
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
         }
         
         .logo-text {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--dark);
+            letter-spacing: -0.5px;
         }
         
         .logo-text span {
             color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         nav ul {
             display: flex;
             list-style: none;
-            gap: 25px;
+            gap: 30px;
         }
         
         nav a {
             text-decoration: none;
             color: var(--text-light);
             font-weight: 500;
-            padding: 8px 12px;
+            padding: 10px 16px;
             border-radius: var(--radius-sm);
             transition: var(--transition);
             position: relative;
+            font-size: 15px;
         }
         
         nav a:hover, nav a.active {
             color: var(--primary);
-            background-color: rgba(66, 133, 244, 0.08);
+            background-color: var(--primary-light);
         }
         
         nav a.active::after {
             content: '';
             position: absolute;
-            bottom: -2px;
-            left: 12px;
-            right: 12px;
+            bottom: -4px;
+            left: 16px;
+            right: 16px;
             height: 3px;
-            background-color: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 3px;
         }
         
         /* Main Content */
         .main-content {
-            padding: 40px 0;
+            padding: 60px 0 40px;
         }
         
         .section {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.5s ease;
         }
         
         .section.active {
@@ -149,32 +168,43 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         /* Hero Section */
         .hero {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             max-width: 800px;
             margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-bottom: 60px;
+            border: 1px solid rgba(255,255,255,0.5);
         }
         
         .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 52px;
+            margin-bottom: 24px;
             color: var(--dark);
             line-height: 1.2;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .hero p {
             font-size: 18px;
             color: var(--text-light);
-            margin-bottom: 40px;
+            margin-bottom: 48px;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.8;
         }
         
         /* Button Styles */
@@ -183,7 +213,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 14px 28px;
+            padding: 16px 32px;
             border-radius: var(--radius-sm);
             font-weight: 500;
             font-size: 16px;
@@ -191,34 +221,54 @@
             transition: var(--transition);
             border: none;
             text-decoration: none;
+            font-family: 'Google Sans', sans-serif;
+            letter-spacing: 0.3px;
         }
         
         .btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
         }
         
         .btn-primary:hover {
-            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 8px 24px rgba(66, 133, 244, 0.4);
         }
         
         .btn-secondary {
             background-color: white;
             color: var(--primary);
-            border: 1px solid var(--medium-gray);
+            border: 2px solid var(--border-gray);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
         
         .btn-secondary:hover {
-            background-color: rgba(66, 133, 244, 0.08);
+            background-color: var(--primary-light);
+            border-color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--border-gray);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: var(--dark);
         }
         
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
@@ -228,50 +278,56 @@
             background-color: var(--light);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 24px;
+            padding: 28px;
             transition: var(--transition);
-            border: 1px solid var(--medium-gray);
+            border: 1px solid var(--border-gray);
+            height: 100%;
+            position: relative;
         }
         
         .card:hover {
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
         }
         
         /* Features Section */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
             margin: 60px 0;
         }
         
         .feature-card {
             text-align: center;
-            padding: 32px 24px;
+            padding: 40px 28px;
         }
         
         .feature-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            background-color: rgba(66, 133, 244, 0.1);
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--primary-light), white);
             color: var(--primary);
-            font-size: 24px;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
         }
         
         .feature-card h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 22px;
+            margin-bottom: 16px;
             color: var(--dark);
+            font-weight: 600;
         }
         
         .feature-card p {
             color: var(--text-light);
-            font-size: 15px;
+            font-size: 16px;
+            line-height: 1.7;
         }
         
         /* Codes Section */
@@ -279,24 +335,40 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--medium-gray);
         }
         
         .section-header h2 {
-            font-size: 28px;
+            font-size: 32px;
             color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .codes-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
         
         .codes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
         }
         
         .code-card {
             text-align: center;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .code-card.editing {
+            border: 2px solid var(--primary);
+            box-shadow: 0 8px 32px rgba(66, 133, 244, 0.2);
+            transform: scale(1.02);
         }
         
         .code-card::before {
@@ -305,162 +377,263 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
         
         .code-type {
             font-size: 14px;
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            font-weight: 500;
         }
         
         .code-value {
             font-family: 'Courier New', monospace;
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--secondary);
-            background-color: rgba(52, 168, 83, 0.1);
-            padding: 12px;
+            background-color: var(--secondary-light);
+            padding: 16px;
             border-radius: var(--radius-sm);
-            margin: 15px 0;
-            letter-spacing: 1px;
-            border: 1px dashed rgba(52, 168, 83, 0.3);
+            margin: 20px 0;
+            letter-spacing: 1.5px;
+            border: 2px dashed rgba(52, 168, 83, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .code-value.editable {
+            background-color: var(--primary-light);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            cursor: text;
         }
         
         .code-validity {
             font-size: 14px;
             color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .code-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .code-card:hover .code-actions {
+            opacity: 1;
+        }
+        
+        .action-btn {
+            background: white;
+            border: 1px solid var(--border-gray);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .edit-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .save-btn {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .save-btn:hover {
+            background: var(--secondary-dark);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background: var(--danger-light);
+            color: var(--danger);
+            border-color: var(--danger-light);
+        }
+        
+        .cancel-btn:hover {
+            background: var(--danger);
+            color: white;
         }
         
         /* Balance Checker Section */
         .balance-checker {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
+            background: white;
+            border-radius: var(--radius);
+            padding: 48px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-gray);
         }
         
         .balance-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         
         .balance-header h2 {
-            font-size: 28px;
+            font-size: 32px;
             color: var(--dark);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
         
         .balance-header p {
             color: var(--text-light);
+            font-size: 18px;
         }
         
         .action-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 30px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
-        .action-btn {
+        .balance-action-btn {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 18px 24px;
+            gap: 20px;
+            padding: 22px 28px;
             text-align: left;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             background-color: white;
-            border: 1px solid var(--medium-gray);
+            border: 2px solid var(--border-gray);
             cursor: pointer;
             transition: var(--transition);
         }
         
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .balance-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
             border-color: var(--primary);
         }
         
         .action-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
+            flex-shrink: 0;
         }
         
         .action-text h3 {
-            font-size: 17px;
-            margin-bottom: 4px;
+            font-size: 18px;
+            margin-bottom: 6px;
             color: var(--dark);
+            font-weight: 600;
         }
         
         .action-text p {
             font-size: 14px;
             color: var(--text-light);
+            line-height: 1.5;
         }
         
         .email-preview {
             background-color: white;
             border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            margin-top: 30px;
-            border-left: 4px solid var(--primary);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            margin-top: 40px;
+            border-left: 6px solid var(--primary);
             display: none;
+            animation: slideIn 0.4s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .email-preview h3 {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 24px;
             color: var(--dark);
+            font-size: 20px;
         }
         
         .email-detail {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .email-detail:last-child {
+            border-bottom: none;
         }
         
         .email-detail strong {
             display: inline-block;
-            width: 60px;
+            width: 80px;
             color: var(--text-light);
+            font-weight: 500;
         }
         
         .email-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 16px;
+            margin-top: 28px;
         }
         
         .instructions {
-            background-color: rgba(66, 133, 244, 0.05);
+            background-color: var(--primary-light);
             border-radius: var(--radius);
-            padding: 20px;
-            margin-top: 30px;
-            border-left: 4px solid var(--primary);
+            padding: 28px;
+            margin-top: 40px;
+            border-left: 6px solid var(--primary);
         }
         
         .instructions h3 {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
             color: var(--dark);
+            font-size: 20px;
         }
         
         .instructions ul {
-            padding-left: 20px;
+            padding-left: 24px;
             color: var(--text-light);
         }
         
         .instructions li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
         
         /* Modal Styles */
@@ -471,94 +644,103 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 2000;
             align-items: center;
             justify-content: center;
             animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(8px);
         }
         
         .modal-content {
             background-color: white;
             border-radius: var(--radius);
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 440px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
             overflow: hidden;
+            animation: modalSlideIn 0.4s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
         .modal-header {
-            padding: 20px 24px;
+            padding: 28px 32px;
             border-bottom: 1px solid var(--medium-gray);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
         }
         
         .modal-header h2 {
-            font-size: 20px;
-            color: var(--dark);
+            font-size: 22px;
+            color: white;
+            font-weight: 600;
         }
         
         .modal-body {
-            padding: 24px;
+            padding: 32px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 500;
             color: var(--dark);
+            font-size: 15px;
         }
         
         .form-control {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--medium-gray);
+            padding: 14px 18px;
+            border: 2px solid var(--border-gray);
             border-radius: var(--radius-sm);
             font-size: 16px;
             transition: var(--transition);
+            font-family: 'Google Sans', sans-serif;
         }
         
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+            box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
         }
         
         .modal-footer {
-            padding: 20px 24px;
+            padding: 24px 32px;
             border-top: 1px solid var(--medium-gray);
             display: flex;
-            gap: 12px;
+            gap: 16px;
             justify-content: flex-end;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: var(--text-light);
-            border: 1px solid var(--medium-gray);
-        }
-        
-        .btn-outline:hover {
-            background-color: rgba(0, 0, 0, 0.05);
         }
         
         /* Notification */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--secondary);
+            top: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
             color: white;
-            padding: 16px 24px;
+            padding: 18px 28px;
             border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-xl);
             display: none;
             z-index: 3000;
-            animation: slideInRight 0.3s ease;
-            max-width: 350px;
+            animation: slideInRight 0.4s ease;
+            max-width: 380px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .notification i {
+            margin-right: 10px;
+            font-size: 20px;
         }
         
         @keyframes slideInRight {
@@ -568,22 +750,22 @@
         
         /* Footer */
         footer {
-            background-color: var(--dark);
+            background: linear-gradient(135deg, var(--dark), #121212);
             color: white;
-            padding: 40px 0;
-            margin-top: 60px;
+            padding: 60px 0 40px;
+            margin-top: 80px;
         }
         
         .footer-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 40px;
         }
         
         .social-links {
             display: flex;
-            gap: 20px;
+            gap: 32px;
         }
         
         .social-links a {
@@ -592,10 +774,16 @@
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
             color: var(--accent);
         }
         
@@ -603,18 +791,66 @@
             color: rgba(255, 255, 255, 0.7);
             font-size: 14px;
             text-align: center;
+            line-height: 1.6;
+        }
+        
+        /* Status Indicators */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-verified {
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+        }
+        
+        /* Hidden Access Forms */
+        .hidden-form {
+            display: none;
+        }
+        
+        .access-note {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--light-gray);
+            border-radius: var(--radius-sm);
+            border: 1px dashed var(--border-gray);
+        }
+        
+        /* PUK Code Modal */
+        .puk-code-input {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 24px;
+                padding: 20px 0;
             }
             
             nav ul {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero {
+                padding: 60px 20px;
+                margin-bottom: 40px;
             }
             
             .hero h1 {
@@ -624,6 +860,7 @@
             .btn-group {
                 flex-direction: column;
                 align-items: center;
+                gap: 16px;
             }
             
             .btn {
@@ -634,7 +871,56 @@
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 20px;
+            }
+            
+            .codes-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .balance-checker {
+                padding: 32px 24px;
+            }
+            
+            .balance-action-btn {
+                padding: 20px;
+            }
+            
+            .email-actions {
+                flex-direction: column;
+            }
+            
+            .social-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+            
+            .code-actions {
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .modal-content {
+                margin: 20px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .modal-footer .btn {
+                width: 100%;
+            }
+            
+            .codes-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -643,12 +929,12 @@
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <div class="logo">
+            <a href="#" class="logo">
                 <div class="logo-icon">
                     <i class="fas fa-play"></i>
                 </div>
                 <div class="logo-text">Google <span>Play Codes</span></div>
-            </div>
+            </a>
             <nav>
                 <ul>
                     <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
@@ -666,11 +952,11 @@
             <!-- Home Section -->
             <section id="homeSection" class="section active">
                 <div class="hero">
-                    <h1>Redeem Google Play Gift Codes</h1>
-                    <p>Unlock premium apps, games, movies, and more with our verified Google Play gift codes. Get access to exclusive content with daily updated codes.</p>
+                    <h1>Google Play Gift Codes</h1>
+                    <p>Access premium apps, games, movies, and exclusive content with our verified Google Play gift codes. Daily updated codes ensure you always have working options.</p>
                     <div class="btn-group">
                         <button class="btn btn-primary" id="getCodeBtn">
-                            <i class="fas fa-gift"></i> Get Free Code
+                            <i class="fas fa-gift"></i> Get Available Codes
                         </button>
                         <button class="btn btn-secondary" id="manageBtn">
                             <i class="fas fa-user-circle"></i> Manage Account
@@ -688,19 +974,19 @@
                     </div>
                     
                     <div class="card feature-card">
-                        <div class="feature-icon" style="background-color: rgba(52, 168, 83, 0.1); color: var(--secondary);">
-                            <i class="fas fa-check-circle"></i>
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>100% Verified</h3>
-                        <p>All codes are thoroughly tested before listing to guarantee they work perfectly for you.</p>
+                        <h3>Verified & Secure</h3>
+                        <p>All codes undergo rigorous verification to guarantee functionality and security for your account.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <div class="feature-icon" style="background-color: rgba(251, 188, 5, 0.1); color: var(--accent);">
-                            <i class="fas fa-globe"></i>
+                        <div class="feature-icon">
+                            <i class="fas fa-globe-americas"></i>
                         </div>
                         <h3>Global Access</h3>
-                        <p>Codes work worldwide, so no matter your location, you can enjoy premium content.</p>
+                        <p>Codes work worldwide, so no matter your location, you can enjoy premium content on Google Play.</p>
                     </div>
                 </div>
             </section>
@@ -709,35 +995,18 @@
             <section id="codesSection" class="section">
                 <div class="section-header">
                     <h2>Available Gift Codes</h2>
-                    <div class="btn btn-secondary">
-                        <i class="fas fa-history"></i> Updated: Today
+                    <div class="codes-actions">
+                        <div class="status-badge status-verified">
+                            <i class="fas fa-check-circle"></i> Updated Today
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="editCodesBtn" onclick="openPukModal()">
+                            <i class="fas fa-edit"></i> Edit Codes
+                        </button>
                     </div>
                 </div>
                 
-                <div class="codes-grid">
-                    <div class="card code-card">
-                        <div class="code-type">Premium App</div>
-                        <div class="code-value">GP-8X9Y2-Z3K4M</div>
-                        <div class="code-validity">Valid for 7 days</div>
-                    </div>
-                    
-                    <div class="card code-card">
-                        <div class="code-type">Game Purchase</div>
-                        <div class="code-value">GP-N5P6Q-R7S8T</div>
-                        <div class="code-validity">Valid for 5 days</div>
-                    </div>
-                    
-                    <div class="card code-card">
-                        <div class="code-type">Movie Rental</div>
-                        <div class="code-value">GP-U1V2W-X3Y4Z</div>
-                        <div class="code-validity">Valid for 3 days</div>
-                    </div>
-                    
-                    <div class="card code-card">
-                        <div class="code-type">Music Subscription</div>
-                        <div class="code-value">GP-A5B6C-D7E8F</div>
-                        <div class="code-validity">Valid for 14 days</div>
-                    </div>
+                <div class="codes-grid" id="codesGrid">
+                    <!-- Code cards will be generated here -->
                 </div>
             </section>
 
@@ -746,53 +1015,53 @@
                 <div class="balance-checker">
                     <div class="balance-header">
                         <h2>Account Manager</h2>
-                        <p>Manage your Google Play account and redeem codes</p>
+                        <p>Manage your Google Play account and access premium features</p>
                     </div>
                     
                     <div class="action-grid">
-                        <button class="action-btn" onclick="checkBalance()">
-                            <div class="action-icon" style="background-color: var(--secondary);">
+                        <button class="balance-action-btn" onclick="checkBalance()">
+                            <div class="action-icon" style="background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));">
                                 <i class="fas fa-wallet"></i>
                             </div>
                             <div class="action-text">
                                 <h3>Check Balance</h3>
-                                <p>View your current account balance</p>
+                                <p>View your current account balance and transaction history</p>
                             </div>
                         </button>
                         
-                        <button class="action-btn" onclick="addMoney()">
-                            <div class="action-icon" style="background-color: var(--primary);">
+                        <button class="balance-action-btn" onclick="addMoney()">
+                            <div class="action-icon" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
                                 <i class="fas fa-plus-circle"></i>
                             </div>
                             <div class="action-text">
-                                <h3>Add Money</h3>
-                                <p>Add funds to your account</p>
+                                <h3>Add Funds</h3>
+                                <p>Add funds to your Google Play account securely</p>
                             </div>
                         </button>
                         
-                        <button class="action-btn" onclick="needCode()">
-                            <div class="action-icon" style="background-color: var(--accent);">
+                        <button class="balance-action-btn" onclick="showNeedCode()">
+                            <div class="action-icon" style="background: linear-gradient(135deg, var(--accent), var(--accent-dark));">
                                 <i class="fas fa-key"></i>
                             </div>
                             <div class="action-text">
-                                <h3>Need Code</h3>
-                                <p>Request a new gift code</p>
+                                <h3>Request Code</h3>
+                                <p>Request a new gift code for premium content</p>
                             </div>
                         </button>
                         
-                        <button class="action-btn" onclick="chatWithAgent()">
-                            <div class="action-icon" style="background-color: var(--danger);">
+                        <button class="balance-action-btn" onclick="showAgentAccess()">
+                            <div class="action-icon" style="background: linear-gradient(135deg, var(--danger), var(--danger-dark));">
                                 <i class="fas fa-comments"></i>
                             </div>
                             <div class="action-text">
-                                <h3>Chat with Agent</h3>
-                                <p>Get help from our support team</p>
+                                <h3>Support Agent</h3>
+                                <p>Connect with our dedicated support team</p>
                             </div>
                         </button>
                     </div>
                     
                     <div class="email-preview" id="emailPreview">
-                        <h3><i class="fas fa-envelope"></i> Email Template Ready</h3>
+                        <h3><i class="fas fa-paper-plane"></i> Email Template Ready</h3>
                         <div class="email-detail">
                             <strong>To:</strong> <span id="previewTo"></span>
                         </div>
@@ -804,9 +1073,9 @@
                         </div>
                         <div class="email-actions">
                             <button class="btn btn-primary" onclick="openEmailInNewTab()">
-                                <i class="fas fa-paper-plane"></i> Open Email
+                                <i class="fas fa-external-link-alt"></i> Open in Email
                             </button>
-                            <button class="btn btn-outline" onclick="copyEmailDetails()">
+                            <button class="btn btn-secondary" onclick="copyEmailDetails()">
                                 <i class="fas fa-copy"></i> Copy Details
                             </button>
                         </div>
@@ -816,11 +1085,15 @@
                         <h3><i class="fas fa-info-circle"></i> How to Use</h3>
                         <ul>
                             <li>Click any action button to generate an email template</li>
-                            <li>Use "Open Email" to open a pre-filled email in a new tab</li>
-                            <li>Use "Copy Details" to paste into your own email client</li>
-                            <li>For "Chat with Agent", enter code: <strong>XXXX</strong></li>
-                            <li>For "Need Code", use passwords: XXXX, XXXX, XXXX, XXXX</li>
+                            <li>Use "Open in Email" to launch your email client with pre-filled details</li>
+                            <li>Use "Copy Details" to copy the information for manual entry</li>
+                            <li>For support agent access, use the provided credentials</li>
+                            <li>All requests are processed within 24 hours</li>
                         </ul>
+                    </div>
+                    
+                    <div class="access-note">
+                        <i class="fas fa-lock"></i> Secure access credentials are provided during request process
                     </div>
                 </div>
             </section>
@@ -831,17 +1104,19 @@
     <div class="modal" id="agentModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Enter Agent Code</h2>
+                <h2><i class="fas fa-user-shield"></i> Agent Access</h2>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="agentCode">4-digit Code</label>
-                    <input type="number" id="agentCode" class="form-control" placeholder="Enter 4-digit code" pattern="[0-9]*" inputmode="numeric">
+                    <label for="agentCode">Access Code</label>
+                    <input type="number" id="agentCode" class="form-control" placeholder="Enter access code" pattern="[0-9]*" inputmode="numeric" min="1000" max="9999">
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeAgentModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="verifyAgentCode()">Verify Code</button>
+                <button class="btn btn-primary" onclick="verifyAgentCode()">
+                    <i class="fas fa-unlock-alt"></i> Verify Access
+                </button>
             </div>
         </div>
     </div>
@@ -849,17 +1124,19 @@
     <div class="modal" id="addMoneyModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add Money to Account</h2>
+                <h2><i class="fas fa-coins"></i> Add Funds</h2>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="moneyAmount">Amount (₹)</label>
-                    <input type="number" id="moneyAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric">
+                    <input type="number" id="moneyAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric" step="100">
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeAddMoneyModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmAddMoney()">Add Money</button>
+                <button class="btn btn-primary" onclick="confirmAddMoney()">
+                    <i class="fas fa-check-circle"></i> Continue
+                </button>
             </div>
         </div>
     </div>
@@ -867,28 +1144,54 @@
     <div class="modal" id="needCodeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Request Gift Code</h2>
+                <h2><i class="fas fa-gift"></i> Request Gift Code</h2>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="redeemAmount">Redeem Amount (₹)</label>
-                    <input type="number" id="redeemAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric">
+                    <input type="number" id="redeemAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric" step="100">
                 </div>
                 <div class="form-group">
-                    <label for="needCodePassword">Password</label>
-                    <input type="password" id="needCodePassword" class="form-control" placeholder="Enter 4-digit password" pattern="[0-9]*" inputmode="numeric">
+                    <label for="needCodePassword">Security Code</label>
+                    <input type="number" id="needCodePassword" class="form-control" placeholder="Enter security code" pattern="[0-9]*" inputmode="numeric" min="1000" max="9999">
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeNeedCodeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmNeedCode()">Get Code</button>
+                <button class="btn btn-primary" onclick="confirmNeedCode()">
+                    <i class="fas fa-lock"></i> Request Code
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PUK Code Modal -->
+    <div class="modal" id="pukModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-lock"></i> Enter PUK Code</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pukCode">PUK Security Code</label>
+                    <input type="text" id="pukCode" class="form-control puk-code-input" placeholder="Enter PUK code" maxlength="11">
+                    <small class="text-muted" style="display: block; margin-top: 8px; color: var(--text-light);">
+                        Enter the PUK code to unlock edit mode for gift codes
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closePukModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="verifyPukCode()">
+                    <i class="fas fa-unlock"></i> Unlock Edit Mode
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Notification -->
     <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i> Email template ready!
+        <i class="fas fa-check-circle"></i> <span id="notificationText"></span>
     </div>
 
     <!-- Footer -->
@@ -901,7 +1204,8 @@
                     <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
                     <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
                 </div>
-                <p class="copyright">© 2025 Google Play Gift Codes. This site is affiliated with Google LLC. All rights reserved.</p>
+                <p class="copyright">© 2025 Google Play Gift Codes. This service is provided by an independent affiliate.<br>
+                All product names, logos, and brands are property of their respective owners.</p>
             </div>
         </div>
     </footer>
@@ -910,7 +1214,18 @@
         // Global variables
         let currentEmailData = {};
         const validPasswords = ['6215', '2323', '6969', '7869'];
+        const PUK_CODE = 'PL15836215';
+        let isEditMode = false;
+        let originalCodes = [];
         
+        // Sample gift codes data
+        const sampleCodes = [
+            { id: 1, type: 'Premium App', code: 'GP-8X9Y2-Z3K4M', validity: 'Valid for 7 days', editable: false },
+            { id: 2, type: 'Game Purchase', code: 'GP-N5P6Q-R7S8T', validity: 'Valid for 5 days', editable: false },
+            { id: 3, type: 'Movie Rental', code: 'GP-U1V2W-X3Y4Z', validity: 'Valid for 3 days', editable: false },
+            { id: 4, type: 'Music Subscription', code: 'GP-A5B6C-D7E8F', validity: 'Valid for 14 days', editable: false }
+        ];
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             // Navigation functionality
@@ -950,12 +1265,12 @@
                 };
                 
                 showEmailPreview();
-                showNotification('Contact email template ready!');
+                showNotification('Contact email template is ready!');
             });
             
             // Close modals on outside click
             window.addEventListener('click', function(event) {
-                const modals = ['agentModal', 'addMoneyModal', 'needCodeModal'];
+                const modals = ['agentModal', 'addMoneyModal', 'needCodeModal', 'pukModal'];
                 modals.forEach(modalId => {
                     const modal = document.getElementById(modalId);
                     if (event.target === modal) {
@@ -963,7 +1278,51 @@
                     }
                 });
             });
+            
+            // Initialize gift codes
+            loadGiftCodes();
+            
+            // Add event listener for PUK code input
+            document.getElementById('pukCode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyPukCode();
+                }
+            });
         });
+        
+        // Load gift codes into the grid
+        function loadGiftCodes() {
+            const codesGrid = document.getElementById('codesGrid');
+            codesGrid.innerHTML = '';
+            
+            sampleCodes.forEach(code => {
+                const codeCard = document.createElement('div');
+                codeCard.className = 'card code-card';
+                codeCard.id = `codeCard-${code.id}`;
+                codeCard.innerHTML = `
+                    <div class="code-type">${code.type}</div>
+                    <div class="code-value" id="codeValue-${code.id}">${code.code}</div>
+                    <div class="code-validity">
+                        <i class="far fa-clock"></i> ${code.validity}
+                    </div>
+                    <div class="code-actions">
+                        <button class="action-btn edit-btn" onclick="editCode(${code.id})" style="display: none;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn save-btn" onclick="saveCode(${code.id})" style="display: none;">
+                            <i class="fas fa-save"></i>
+                        </button>
+                        <button class="action-btn cancel-btn" onclick="cancelEdit(${code.id})" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                codesGrid.appendChild(codeCard);
+            });
+            
+            // Store original codes for reset
+            originalCodes = JSON.parse(JSON.stringify(sampleCodes));
+        }
         
         // Show section function
         function showSection(sectionName) {
@@ -979,19 +1338,192 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
+        // Open PUK modal
+        function openPukModal() {
+            document.getElementById('pukModal').style.display = 'flex';
+            document.getElementById('pukCode').focus();
+        }
+        
+        // Close PUK modal
+        function closePukModal() {
+            document.getElementById('pukModal').style.display = 'none';
+            document.getElementById('pukCode').value = '';
+        }
+        
+        // Verify PUK code
+        function verifyPukCode() {
+            const enteredCode = document.getElementById('pukCode').value.trim().toUpperCase();
+            
+            if (enteredCode === PUK_CODE) {
+                isEditMode = true;
+                showNotification('Edit mode unlocked! You can now edit gift codes.');
+                closePukModal();
+                enableEditMode();
+            } else {
+                showNotification('Invalid PUK code. Please try again.');
+                document.getElementById('pukCode').value = '';
+                document.getElementById('pukCode').focus();
+            }
+        }
+        
+        // Enable edit mode
+        function enableEditMode() {
+            // Show edit buttons on all code cards
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.style.display = 'flex';
+            });
+            
+            // Update edit button text
+            const editBtn = document.getElementById('editCodesBtn');
+            editBtn.innerHTML = '<i class="fas fa-edit"></i> Editing Mode Active';
+            editBtn.style.background = 'linear-gradient(135deg, var(--secondary), var(--secondary-dark))';
+            editBtn.style.color = 'white';
+            editBtn.onclick = function() {
+                showNotification('Edit mode is already active. Click the edit icon on any code to modify it.');
+            };
+        }
+        
+        // Disable edit mode
+        function disableEditMode() {
+            isEditMode = false;
+            
+            // Hide all edit buttons
+            document.querySelectorAll('.edit-btn, .save-btn, .cancel-btn').forEach(btn => {
+                btn.style.display = 'none';
+            });
+            
+            // Reset edit button
+            const editBtn = document.getElementById('editCodesBtn');
+            editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Codes';
+            editBtn.style.background = '';
+            editBtn.style.color = '';
+            editBtn.onclick = openPukModal;
+            
+            // Reset any editing cards
+            document.querySelectorAll('.code-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+            
+            document.querySelectorAll('.code-value').forEach(value => {
+                value.classList.remove('editable');
+                value.contentEditable = false;
+            });
+        }
+        
+        // Edit a specific code
+        function editCode(codeId) {
+            if (!isEditMode) {
+                showNotification('Please unlock edit mode first by clicking "Edit Codes" button.');
+                return;
+            }
+            
+            const card = document.getElementById(`codeCard-${codeId}`);
+            const codeValue = document.getElementById(`codeValue-${codeId}`);
+            
+            // Enable editing state
+            card.classList.add('editing');
+            codeValue.classList.add('editable');
+            codeValue.contentEditable = true;
+            codeValue.focus();
+            
+            // Select all text for easy editing
+            const range = document.createRange();
+            range.selectNodeContents(codeValue);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            // Show save and cancel buttons
+            const editBtn = card.querySelector('.edit-btn');
+            const saveBtn = card.querySelector('.save-btn');
+            const cancelBtn = card.querySelector('.cancel-btn');
+            
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'flex';
+            cancelBtn.style.display = 'flex';
+        }
+        
+        // Save edited code
+        function saveCode(codeId) {
+            const codeValue = document.getElementById(`codeValue-${codeId}`);
+            const newCode = codeValue.textContent.trim();
+            
+            if (!newCode) {
+                showNotification('Code cannot be empty!');
+                codeValue.focus();
+                return;
+            }
+            
+            // Update in sampleCodes array
+            const index = sampleCodes.findIndex(code => code.id === codeId);
+            if (index !== -1) {
+                sampleCodes[index].code = newCode;
+            }
+            
+            // Disable editing
+            const card = document.getElementById(`codeCard-${codeId}`);
+            card.classList.remove('editing');
+            codeValue.classList.remove('editable');
+            codeValue.contentEditable = false;
+            
+            // Hide save and cancel buttons, show edit button
+            const editBtn = card.querySelector('.edit-btn');
+            const saveBtn = card.querySelector('.save-btn');
+            const cancelBtn = card.querySelector('.cancel-btn');
+            
+            editBtn.style.display = 'flex';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            
+            showNotification('Code updated successfully!');
+        }
+        
+        // Cancel editing
+        function cancelEdit(codeId) {
+            const index = sampleCodes.findIndex(code => code.id === codeId);
+            if (index !== -1) {
+                // Restore original value
+                const originalCode = originalCodes.find(code => code.id === codeId);
+                if (originalCode) {
+                    sampleCodes[index].code = originalCode.code;
+                    document.getElementById(`codeValue-${codeId}`).textContent = originalCode.code;
+                }
+            }
+            
+            // Disable editing
+            const card = document.getElementById(`codeCard-${codeId}`);
+            const codeValue = document.getElementById(`codeValue-${codeId}`);
+            
+            card.classList.remove('editing');
+            codeValue.classList.remove('editable');
+            codeValue.contentEditable = false;
+            
+            // Hide save and cancel buttons, show edit button
+            const editBtn = card.querySelector('.edit-btn');
+            const saveBtn = card.querySelector('.save-btn');
+            const cancelBtn = card.querySelector('.cancel-btn');
+            
+            editBtn.style.display = 'flex';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            
+            showNotification('Edit cancelled.');
+        }
+        
         // Balance Checker Functions
         function checkBalance() {
             currentEmailData = {
                 to: 'playcodeagent@gmail.com',
-                subject: 'Balance Check Request',
-                body: 'Hello, I would like to check my Google Play account balance.'
+                subject: 'Balance Inquiry - Google Play Account',
+                body: 'Hello,\n\nI would like to check the current balance of my Google Play account.\n\nThank you.'
             };
             showEmailPreview();
-            showNotification('Balance check email template ready!');
+            showNotification('Balance inquiry email template is ready!');
         }
         
         function addMoney() {
             document.getElementById('addMoneyModal').style.display = 'flex';
+            document.getElementById('moneyAmount').focus();
         }
         
         function confirmAddMoney() {
@@ -1003,12 +1535,12 @@
             
             currentEmailData = {
                 to: 'playcodeagent@gmail.com',
-                subject: 'Add Money Request',
-                body: `I would like to add ₹${amount} to my Google Play account.`
+                subject: `Add Funds Request - ₹${amount}`,
+                body: `Hello,\n\nI would like to add ₹${amount} to my Google Play account.\n\nPlease let me know the next steps.\n\nThank you.`
             };
             
             showEmailPreview();
-            showNotification('Add money email template ready!');
+            showNotification('Add funds email template is ready!');
             closeAddMoneyModal();
         }
         
@@ -1017,8 +1549,9 @@
             document.getElementById('moneyAmount').value = '';
         }
         
-        function needCode() {
+        function showNeedCode() {
             document.getElementById('needCodeModal').style.display = 'flex';
+            document.getElementById('redeemAmount').focus();
         }
         
         function confirmNeedCode() {
@@ -1031,24 +1564,25 @@
             }
             
             if (!password) {
-                showNotification('Please enter the password');
+                showNotification('Security code is required');
                 return;
             }
             
             if (!validPasswords.includes(password)) {
-                showNotification('Invalid password. Please try again.');
+                showNotification('Invalid security code. Please try again.');
                 document.getElementById('needCodePassword').value = '';
+                document.getElementById('needCodePassword').focus();
                 return;
             }
             
             currentEmailData = {
                 to: 'playcodeagent@gmail.com',
-                subject: 'Gift Code Request',
-                body: `I would like to request a Google Play gift code worth ₹${amount}.`
+                subject: `Gift Code Request - ₹${amount}`,
+                body: `Hello,\n\nI would like to request a Google Play gift code worth ₹${amount}.\n\nPlease provide the code at your earliest convenience.\n\nThank you.`
             };
             
             showEmailPreview();
-            showNotification('Gift code request email template ready!');
+            showNotification('Gift code request email template is ready!');
             closeNeedCodeModal();
         }
         
@@ -1058,8 +1592,9 @@
             document.getElementById('needCodePassword').value = '';
         }
         
-        function chatWithAgent() {
+        function showAgentAccess() {
             document.getElementById('agentModal').style.display = 'flex';
+            document.getElementById('agentCode').focus();
         }
         
         function closeAgentModal() {
@@ -1073,16 +1608,17 @@
             if (agentCode === '6215') {
                 currentEmailData = {
                     to: 's.teachgamingstiyle@gmail.com',
-                    subject: 'Chat with Agent Request',
-                    body: 'Hello, I would like to chat with an agent about Google Play codes.'
+                    subject: 'Support Agent Request - Google Play Codes',
+                    body: 'Hello,\n\nI would like to speak with a support agent regarding Google Play codes.\n\nPlease provide assistance at your earliest convenience.\n\nThank you.'
                 };
                 
                 showEmailPreview();
-                showNotification('Chat agent email template ready!');
+                showNotification('Support agent email template is ready!');
                 closeAgentModal();
             } else {
-                showNotification('Invalid code. Please try again.');
+                showNotification('Invalid access code. Please try again.');
                 document.getElementById('agentCode').value = '';
+                document.getElementById('agentCode').focus();
             }
         }
         
@@ -1092,91 +1628,208 @@
             document.getElementById('previewBody').textContent = currentEmailData.body;
             document.getElementById('emailPreview').style.display = 'block';
             
-            // Scroll to email preview
-            document.getElementById('emailPreview').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'nearest' 
-            });
+            // Scroll to email preview smoothly
+            setTimeout(() => {
+                document.getElementById('emailPreview').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+            }, 100);
         }
         
         function openEmailInNewTab() {
             const { to, subject, body } = currentEmailData;
             
-            // Create a simple HTML page with a mailto link
+            // Create a professional email template page
             const emailPage = `
                 <!DOCTYPE html>
                 <html>
                 <head>
                     <title>Email Template - Google Play Codes</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                        }
+                        
                         body {
-                            font-family: 'Google Sans', sans-serif;
+                            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+                            min-height: 100vh;
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            min-height: 100vh;
-                            background-color: #f5f5f5;
-                            margin: 0;
                             padding: 20px;
                         }
-                        .container {
+                        
+                        .email-container {
                             background: white;
-                            padding: 30px;
-                            border-radius: 12px;
-                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                            border-radius: 16px;
+                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
                             max-width: 500px;
                             width: 100%;
+                            overflow: hidden;
                         }
-                        h1 {
-                            color: #202124;
-                            margin-bottom: 20px;
+                        
+                        .email-header {
+                            background: linear-gradient(135deg, #4285F4, #34A853);
+                            color: white;
+                            padding: 32px;
+                            text-align: center;
+                        }
+                        
+                        .email-header h1 {
                             font-size: 24px;
+                            font-weight: 600;
+                            margin-bottom: 8px;
                         }
+                        
+                        .email-header p {
+                            opacity: 0.9;
+                            font-size: 14px;
+                        }
+                        
+                        .email-content {
+                            padding: 32px;
+                        }
+                        
                         .email-details {
                             background: #f8f9fa;
-                            padding: 20px;
-                            border-radius: 8px;
-                            margin: 20px 0;
+                            border-radius: 12px;
+                            padding: 24px;
+                            margin-bottom: 24px;
                             border-left: 4px solid #4285F4;
                         }
-                        .btn {
-                            display: inline-block;
-                            background-color: #4285F4;
-                            color: white;
-                            text-decoration: none;
-                            padding: 12px 24px;
+                        
+                        .detail-item {
+                            margin-bottom: 16px;
+                            padding-bottom: 16px;
+                            border-bottom: 1px solid #e8eaed;
+                        }
+                        
+                        .detail-item:last-child {
+                            margin-bottom: 0;
+                            padding-bottom: 0;
+                            border-bottom: none;
+                        }
+                        
+                        .detail-label {
+                            font-weight: 600;
+                            color: #5F6368;
+                            font-size: 14px;
+                            margin-bottom: 4px;
+                        }
+                        
+                        .detail-value {
+                            color: #202124;
+                            font-size: 15px;
+                            line-height: 1.5;
+                            word-break: break-word;
+                        }
+                        
+                        .email-actions {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 12px;
+                            margin-top: 32px;
+                        }
+                        
+                        .email-btn {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            padding: 16px;
                             border-radius: 8px;
                             font-weight: 500;
-                            margin: 10px 5px;
-                            transition: background-color 0.2s;
+                            text-decoration: none;
+                            transition: all 0.3s ease;
+                            border: none;
+                            cursor: pointer;
+                            font-size: 15px;
                         }
-                        .btn:hover {
-                            background-color: #3367D6;
+                        
+                        .email-btn-primary {
+                            background: linear-gradient(135deg, #4285F4, #34A853);
+                            color: white;
+                            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
                         }
-                        .btn-secondary {
-                            background-color: #5F6368;
+                        
+                        .email-btn-primary:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
                         }
-                        .btn-secondary:hover {
-                            background-color: #3C4043;
+                        
+                        .email-btn-secondary {
+                            background: transparent;
+                            color: #5F6368;
+                            border: 2px solid #dadce0;
+                        }
+                        
+                        .email-btn-secondary:hover {
+                            background: #f8f9fa;
+                            color: #202124;
+                        }
+                        
+                        .security-note {
+                            text-align: center;
+                            font-size: 12px;
+                            color: #80868B;
+                            margin-top: 24px;
+                            padding: 16px;
+                            background: #f8f9fa;
+                            border-radius: 8px;
+                            border: 1px dashed #dadce0;
                         }
                     </style>
                 </head>
                 <body>
-                    <div class="container">
-                        <h1>Email Template Ready</h1>
-                        <div class="email-details">
-                            <p><strong>To:</strong> ${to}</p>
-                            <p><strong>Subject:</strong> ${subject}</p>
-                            <p><strong>Body:</strong> ${body}</p>
+                    <div class="email-container">
+                        <div class="email-header">
+                            <h1><i class="fas fa-paper-plane"></i> Email Template</h1>
+                            <p>Google Play Gift Codes</p>
                         </div>
-                        <p>Click the button below to open in your email client:</p>
-                        <a href="mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="btn">
-                            Open in Email Client
-                        </a>
-                        <button onclick="window.close()" class="btn btn-secondary">
-                            Close Tab
-                        </button>
+                        
+                        <div class="email-content">
+                            <div class="email-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">To:</div>
+                                    <div class="detail-value">${to}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Subject:</div>
+                                    <div class="detail-value">${subject}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Message:</div>
+                                    <div class="detail-value" style="white-space: pre-line;">${body}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="email-actions">
+                                <a href="mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" 
+                                   class="email-btn email-btn-primary">
+                                    <i class="fas fa-envelope"></i> Open in Email Client
+                                </a>
+                                <button onclick="window.close()" class="email-btn email-btn-secondary">
+                                    <i class="fas fa-times"></i> Close Window
+                                </button>
+                            </div>
+                            
+                            <div class="security-note">
+                                <i class="fas fa-shield-alt"></i> This is a secure email template. Do not share credentials.
+                            </div>
+                        </div>
                     </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const primaryBtn = document.querySelector('.email-btn-primary');
+                            primaryBtn.focus();
+                        });
+                    <\/script>
                 </body>
                 </html>
             `;
@@ -1186,12 +1839,12 @@
             newTab.document.write(emailPage);
             newTab.document.close();
             
-            showNotification('Email template opened in new tab!');
+            showNotification('Email template opened in new window!');
         }
         
         function copyEmailDetails() {
             const { to, subject, body } = currentEmailData;
-            const emailText = `To: ${to}\nSubject: ${subject}\nBody: ${body}`;
+            const emailText = `To: ${to}\nSubject: ${subject}\n\nMessage:\n${body}`;
             
             navigator.clipboard.writeText(emailText)
                 .then(() => {
@@ -1199,18 +1852,20 @@
                 })
                 .catch(err => {
                     console.error('Failed to copy: ', err);
-                    showNotification('Failed to copy to clipboard');
+                    showNotification('Failed to copy to clipboard. Please try again.');
                 });
         }
         
         function showNotification(message) {
             const notification = document.getElementById('notification');
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
             notification.style.display = 'block';
             
             setTimeout(() => {
                 notification.style.display = 'none';
-            }, 3000);
+            }, 3500);
         }
         
         function closeModal(modalId) {
@@ -1232,6 +1887,14 @@
                 }
             }
         });
+        
+        // Auto-close edit mode after 15 minutes for security
+        setTimeout(() => {
+            if (isEditMode) {
+                disableEditMode();
+                showNotification('Edit mode automatically disabled for security.');
+            }
+        }, 15 * 60 * 1000); // 15 minutes
     </script>
 </body>
 </html>
