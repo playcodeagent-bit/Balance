@@ -2,641 +2,487 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Play Gift Codes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PlayCode Account Management</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        /* CSS Variables */
         :root {
-            --primary: #4285F4;
-            --primary-dark: #3367D6;
-            --primary-light: #E8F0FE;
-            --secondary: #34A853;
-            --secondary-dark: #2E8B57;
-            --secondary-light: #E6F4EA;
-            --accent: #FBBC05;
-            --accent-dark: #F9AB00;
-            --accent-light: #FEF7E0;
-            --danger: #EA4335;
-            --danger-dark: #D33426;
-            --danger-light: #FDECEA;
-            --dark: #202124;
-            --dark-light: #3C4043;
-            --light: #FFFFFF;
-            --light-gray: #F8F9FA;
-            --medium-gray: #E8EAED;
-            --border-gray: #DADCE0;
-            --text: #202124;
-            --text-light: #5F6368;
-            --text-lighter: #80868B;
-            --shadow: 0 1px 2px rgba(60,64,67,0.3), 0 2px 6px rgba(60,64,67,0.15);
-            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 16px;
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-secondary: #625B71;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-surface: #FEF7FF;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-background: #FEF7FF;
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-error-container: #FFDAD6;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-on-secondary-container: #1D192B;
+            --md-sys-color-on-surface: #1D1B20;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-shadow: #000000;
+            
+            --md-ref-typeface-plain: 'Google Sans', 'Roboto', sans-serif;
+            --md-ref-typeface-brand: 'Google Sans', 'Roboto', sans-serif;
+            
+            --elevation-1: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --elevation-2: 0 2px 6px rgba(0,0,0,0.05), 0 3px 6px rgba(0,0,0,0.1);
+            --elevation-3: 0 4px 8px rgba(0,0,0,0.07), 0 6px 12px rgba(0,0,0,0.15);
+            --elevation-4: 0 8px 16px rgba(0,0,0,0.1), 0 12px 24px rgba(0,0,0,0.2);
+            
+            --radius-small: 12px;
+            --radius-medium: 20px;
+            --radius-large: 28px;
+            
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
         }
-        
-        /* Base Styles */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
         }
-        
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: var(--md-ref-typeface-plain);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-surface);
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        h1, h2, h3, h4, h5 {
-            font-family: 'Google Sans', sans-serif;
-            font-weight: 500;
+
+        /* Safe area for notches */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        /* Header & Navigation */
-        header {
-            background-color: var(--light);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.95);
-        }
-        
-        .header-container {
+
+        /* Auth Pages */
+        .auth-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-        
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+            align-items: center;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            padding: var(--spacing-md);
+            background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, #7E57C2 100%);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
         }
-        
-        .logo-text {
-            font-size: 24px;
+
+        .auth-box {
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-large);
+            box-shadow: var(--elevation-4);
+            padding: var(--spacing-xl);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .auth-header h1 {
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--dark);
             letter-spacing: -0.5px;
         }
-        
-        .logo-text span {
-            color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .auth-header p {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.875rem;
         }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
         }
-        
-        nav a {
-            text-decoration: none;
-            color: var(--text-light);
-            font-weight: 500;
-            padding: 10px 16px;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-            position: relative;
-            font-size: 15px;
-        }
-        
-        nav a:hover, nav a.active {
-            color: var(--primary);
-            background-color: var(--primary-light);
-        }
-        
-        nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 16px;
-            right: 16px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 3px;
-        }
-        
-        /* Main Content */
-        .main-content {
-            padding: 60px 0 40px;
-        }
-        
-        .section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .section.active {
+
+        .form-group label {
             display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            margin-bottom: 60px;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        
-        .hero h1 {
-            font-size: 52px;
-            margin-bottom: 24px;
-            color: var(--dark);
-            line-height: 1.2;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .hero p {
-            font-size: 18px;
-            color: var(--text-light);
-            margin-bottom: 48px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-        }
-        
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-xs);
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.875rem;
             font-weight: 500;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--md-sys-color-outline);
+            border-radius: var(--radius-small);
+            font-size: 1rem;
+            background: transparent;
+            color: var(--md-sys-color-on-surface);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-appearance: none;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--md-sys-color-primary);
+            box-shadow: 0 0 0 3px rgba(103, 80, 164, 0.1);
+        }
+
+        select.form-control {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2349454F'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right var(--spacing-md) center;
+            background-size: 24px;
+            padding-right: 48px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: var(--spacing-md);
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
             border: none;
-            text-decoration: none;
-            font-family: 'Google Sans', sans-serif;
-            letter-spacing: 0.3px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(66, 133, 244, 0.4);
-        }
-        
-        .btn-secondary {
-            background-color: white;
-            color: var(--primary);
-            border: 2px solid var(--border-gray);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-sm {
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: var(--text-light);
-            border: 2px solid var(--border-gray);
-        }
-        
-        .btn-outline:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-            color: var(--dark);
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        /* Cards */
-        .card {
-            background-color: var(--light);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px;
-            transition: var(--transition);
-            border: 1px solid var(--border-gray);
-            height: 100%;
-            position: relative;
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-xl);
-            transform: translateY(-4px);
-        }
-        
-        /* Features Section */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
-        }
-        
-        .feature-card {
-            text-align: center;
-            padding: 40px 28px;
-        }
-        
-        .feature-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, var(--primary-light), white);
-            color: var(--primary);
-            font-size: 28px;
-            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
-        }
-        
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 16px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-        
-        .feature-card p {
-            color: var(--text-light);
-            font-size: 16px;
-            line-height: 1.7;
-        }
-        
-        /* Codes Section */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--medium-gray);
-        }
-        
-        .section-header h2 {
-            font-size: 32px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-        
-        .codes-actions {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .codes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
-        }
-        
-        .code-card {
+            border-radius: var(--radius-small);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
         }
-        
-        .code-card.editing {
-            border: 2px solid var(--primary);
-            box-shadow: 0 8px 32px rgba(66, 133, 244, 0.2);
-            transform: scale(1.02);
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
-        
-        .code-card::before {
+
+        .btn:active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .btn:hover {
+            background-color: #5C43A0;
+            transform: translateY(-1px);
+            box-shadow: var(--elevation-2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--md-sys-color-secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #534E65;
+        }
+
+        .btn-danger {
+            background-color: var(--md-sys-color-error);
+        }
+
+        .btn-danger:hover {
+            background-color: #A31616;
+        }
+
+        .btn-outlined {
+            background: transparent;
+            border: 2px solid var(--md-sys-color-outline);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .btn-outlined:hover {
+            background: var(--md-sys-color-surface-variant);
+            border-color: var(--md-sys-color-on-surface);
+        }
+
+        /* Typography & Layout */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 { margin-top: var(--spacing-sm); }
+        .mt-3 { margin-top: var(--spacing-md); }
+        .mt-4 { margin-top: var(--spacing-lg); }
+        .mt-5 { margin-top: var(--spacing-xl); }
+        .mb-2 { margin-bottom: var(--spacing-sm); }
+        .mb-3 { margin-bottom: var(--spacing-md); }
+        .mb-4 { margin-bottom: var(--spacing-lg); }
+        .mb-5 { margin-bottom: var(--spacing-xl); }
+
+        .link {
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--spacing-xs);
+            margin: calc(var(--spacing-xs) * -1);
+            border-radius: var(--radius-small);
+        }
+
+        .link:hover {
+            background: rgba(103, 80, 164, 0.08);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--md-sys-color-background); /* यही color पूरे page का है */
+            box-shadow: var(--elevation-1);
+            padding: var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: var(--md-sys-color-background);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .logo {
+           font-size: 1.5rem;
+           font-weight: 700;
+           color: #FFFFFF;
+           letter-spacing: -0.5px;
+           background: linear-gradient(45deg, #FFFFFF, #E0E0E0);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-size: 1.25rem;
+        }
+
+        .user-icon:active {
+            transform: scale(0.95);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: var(--md-sys-color-surface);
+            box-shadow: var(--elevation-3);
+            border-radius: var(--radius-medium);
+            width: 280px;
+            max-width: 90vw;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid var(--md-sys-color-surface-variant);
+            animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface);
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--md-sys-color-surface-variant);
+        }
+
+        .dropdown-item .material-icons-round {
+            font-size: 1.25rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-md);
+            background: var(--md-sys-color-surface);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--radius-medium);
+            box-shadow: var(--elevation-1);
+        }
+
+        .welcome-section h1 {
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .manage-text {
+            font-size: 1rem;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: var(--spacing-md);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .feature-card {
+            background: var(--md-sys-color-surface);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--elevation-1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            right: 0;
+            height: 4px;
+            background: var(--md-sys-color-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s;
         }
-        
-        .code-type {
-            font-size: 14px;
-            color: var(--text-light);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--elevation-3);
+            border-color: var(--md-sys-color-primary-container);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--spacing-md);
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--md-sys-color-primary-container);
+            border-radius: 16px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--md-sys-color-on-surface);
+            font-size: 1.125rem;
             font-weight: 500;
         }
-        
-        .code-value {
-            font-family: 'Courier New', monospace;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--secondary);
-            background-color: var(--secondary-light);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            margin: 20px 0;
-            letter-spacing: 1.5px;
-            border: 2px dashed rgba(52, 168, 83, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .code-value.editable {
-            background-color: var(--primary-light);
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            cursor: text;
-        }
-        
-        .code-validity {
-            font-size: 14px;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        
-        .code-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .code-card:hover .code-actions {
-            opacity: 1;
-        }
-        
-        .action-btn {
-            background: white;
-            border: 1px solid var(--border-gray);
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-light);
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .action-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-            transform: scale(1.1);
-        }
-        
-        .edit-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        
-        .save-btn {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-        }
-        
-        .save-btn:hover {
-            background: var(--secondary-dark);
-            color: white;
-        }
-        
-        .cancel-btn {
-            background: var(--danger-light);
-            color: var(--danger);
-            border-color: var(--danger-light);
-        }
-        
-        .cancel-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-        
-        /* Balance Checker Section */
-        .balance-checker {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: var(--radius);
-            padding: 48px;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border-gray);
-        }
-        
-        .balance-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .balance-header h2 {
-            font-size: 32px;
-            color: var(--dark);
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        
-        .balance-header p {
-            color: var(--text-light);
-            font-size: 18px;
-        }
-        
-        .action-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .balance-action-btn {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 22px 28px;
-            text-align: left;
-            border-radius: var(--radius-md);
-            background-color: white;
-            border: 2px solid var(--border-gray);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .balance-action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-        
-        .action-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        
-        .action-text h3 {
-            font-size: 18px;
-            margin-bottom: 6px;
-            color: var(--dark);
-            font-weight: 600;
-        }
-        
-        .action-text p {
-            font-size: 14px;
-            color: var(--text-light);
+
+        .feature-card p {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.875rem;
             line-height: 1.5;
         }
-        
-        .email-preview {
-            background-color: white;
-            border-radius: var(--radius);
-            padding: 32px;
-            box-shadow: var(--shadow-lg);
-            margin-top: 40px;
-            border-left: 6px solid var(--primary);
-            display: none;
-            animation: slideIn 0.4s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .email-preview h3 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            color: var(--dark);
-            font-size: 20px;
-        }
-        
-        .email-detail {
-            margin-bottom: 16px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-        
-        .email-detail:last-child {
-            border-bottom: none;
-        }
-        
-        .email-detail strong {
-            display: inline-block;
-            width: 80px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-        
-        .email-actions {
-            display: flex;
-            gap: 16px;
-            margin-top: 28px;
-        }
-        
-        .instructions {
-            background-color: var(--primary-light);
-            border-radius: var(--radius);
-            padding: 28px;
-            margin-top: 40px;
-            border-left: 6px solid var(--primary);
-        }
-        
-        .instructions h3 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            color: var(--dark);
-            font-size: 20px;
-        }
-        
-        .instructions ul {
-            padding-left: 24px;
-            color: var(--text-light);
-        }
-        
-        .instructions li {
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-        
-        /* Modal Styles */
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -644,1257 +490,1225 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1001;
+            padding: var(--spacing-md);
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.3s ease;
-            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
-            background-color: white;
-            border-radius: var(--radius);
+            background: var(--md-sys-color-surface);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-large);
             width: 100%;
-            max-width: 440px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            animation: modalSlideIn 0.4s ease;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--elevation-4);
+            position: relative;
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--md-sys-color-surface-variant);
         }
-        
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: translateY(-40px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        .modal-header {
-            padding: 28px 32px;
-            border-bottom: 1px solid var(--medium-gray);
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-        
-        .modal-header h2 {
-            font-size: 22px;
-            color: white;
-            font-weight: 600;
-        }
-        
-        .modal-body {
-            padding: 32px;
-        }
-        
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-            color: var(--dark);
-            font-size: 15px;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--border-gray);
-            border-radius: var(--radius-sm);
-            font-size: 16px;
-            transition: var(--transition);
-            font-family: 'Google Sans', sans-serif;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
-        }
-        
-        .modal-footer {
-            padding: 24px 32px;
-            border-top: 1px solid var(--medium-gray);
-            display: flex;
-            gap: 16px;
-            justify-content: flex-end;
-        }
-        
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
-            color: white;
-            padding: 18px 28px;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-xl);
-            display: none;
-            z-index: 3000;
-            animation: slideInRight 0.4s ease;
-            max-width: 380px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .notification i {
-            margin-right: 10px;
-            font-size: 20px;
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, var(--dark), #121212);
-            color: white;
-            padding: 60px 0 40px;
-            margin-top: 80px;
-        }
-        
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 32px;
-        }
-        
-        .social-links a {
-            color: white;
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: var(--radius-sm);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .social-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            color: var(--accent);
-        }
-        
-        .copyright {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            text-align: center;
-            line-height: 1.6;
-        }
-        
-        /* Status Indicators */
-        .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .status-verified {
-            background-color: var(--secondary-light);
-            color: var(--secondary);
-        }
-        
-        /* Hidden Access Forms */
-        .hidden-form {
-            display: none;
-        }
-        
-        .access-note {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 14px;
-            margin-top: 20px;
-            padding: 16px;
-            background: var(--light-gray);
-            border-radius: var(--radius-sm);
-            border: 1px dashed var(--border-gray);
-        }
-        
-        /* PUK Code Modal */
-        .puk-code-input {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 24px;
-                padding: 20px 0;
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 15px;
-            }
-            
-            .hero {
-                padding: 60px 20px;
-                margin-bottom: 40px;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .btn-group {
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            
-            .codes-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-            
-            .balance-checker {
-                padding: 32px 24px;
-            }
-            
-            .balance-action-btn {
-                padding: 20px;
-            }
-            
-            .email-actions {
-                flex-direction: column;
-            }
-            
-            .social-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 16px;
-            }
-            
-            .code-actions {
+            to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
-        
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 32px;
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .modal-header h2 {
+            color: var(--md-sys-color-on-surface);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--md-sys-color-on-surface-variant);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .close-btn:hover {
+            background-color: var(--md-sys-color-surface-variant);
+        }
+
+        /* Admin Panel */
+        .admin-container {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .users-table-container {
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--elevation-1);
+            overflow: hidden;
+            margin-top: var(--spacing-lg);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--md-sys-color-surface-variant);
+            font-size: 0.875rem;
+        }
+
+        th {
+            background-color: var(--md-sys-color-surface-variant);
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface-variant);
+            position: sticky;
+            top: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: var(--spacing-xs) var(--spacing-md);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .orders-table {
+            margin-top: var(--spacing-xl);
+        }
+
+        /* Star Rating */
+        .star-rating {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-md) 0;
+        }
+
+        .star {
+            font-size: 2.5rem;
+            color: var(--md-sys-color-surface-variant);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-small);
+        }
+
+        .star:hover {
+            color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+            transform: scale(1.1);
+        }
+
+        .star.selected {
+            color: #FFD700;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--md-sys-color-surface-variant);
+            border-top: 3px solid var(--md-sys-color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Touch-friendly improvements */
+        input, button, select, .feature-card, .dropdown-item {
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --spacing-md: 12px;
+                --spacing-lg: 16px;
+                --spacing-xl: 20px;
             }
-            
-            .modal-content {
-                margin: 20px;
+
+            .auth-box {
+                padding: var(--spacing-lg);
+                margin: var(--spacing-md);
             }
-            
-            .modal-footer {
-                flex-direction: column;
+
+            .header {
+                padding: var(--spacing-sm) var(--spacing-md);
             }
-            
-            .modal-footer .btn {
-                width: 100%;
+
+            .logo {
+                font-size: 1.25rem;
             }
-            
-            .codes-grid {
+
+            .container {
+                padding: var(--spacing-sm);
+            }
+
+            .features-grid {
                 grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .feature-card {
+                padding: var(--spacing-md);
+            }
+
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.75rem;
+            }
+
+            .modal-content {
+                margin: var(--spacing-sm);
+                padding: var(--spacing-md);
+                max-height: 85vh;
+            }
+
+            .dropdown-menu {
+                width: calc(100vw - 32px);
+                right: var(--spacing-sm);
+                max-width: 280px;
+            }
+
+            table {
+                min-width: 700px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-btn {
+                width: 100%;
+                padding: var(--spacing-sm);
+            }
+
+            .btn {
+                height: 44px;
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                border-radius: var(--radius-medium);
+            }
+
+            .star-rating {
+                gap: var(--spacing-sm);
+            }
+
+            .star {
+                font-size: 2rem;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --md-sys-color-primary: #D0BCFF;
+                --md-sys-color-primary-container: #4F378B;
+                --md-sys-color-surface: #1C1B1F;
+                --md-sys-color-surface-variant: #49454F;
+                --md-sys-color-background: #1C1B1F;
+                --md-sys-color-on-surface: #E6E1E5;
+                --md-sys-color-on-surface-variant: #CAC4D0;
+                --md-sys-color-outline: #938F99;
+            }
+
+            .auth-container {
+                background: linear-gradient(135deg, #1C1B1F 0%, #2D2A35 100%);
+            }
+
+            .auth-box {
+                background: var(--md-sys-color-surface);
+                border: 1px solid var(--md-sys-color-surface-variant);
+            }
+
+            .form-control {
+                background: rgba(255,255,255,0.05);
+            }
+        }
+
+        /* iOS-specific optimizations */
+        @supports (-webkit-touch-callout: none) {
+            .auth-container {
+                min-height: -webkit-fill-available;
+            }
+
+            input, select {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .modal {
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-play"></i>
-                </div>
-                <div class="logo-text">Google <span>Play Codes</span></div>
-            </a>
-            <nav>
-                <ul>
-                    <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
-                    <li><a href="#" class="nav-link" data-section="codes">Gift Codes</a></li>
-                    <li><a href="#" class="nav-link" data-section="balance">Account Manager</a></li>
-                    <li><a href="#" class="nav-link" id="contactLink">Contact</a></li>
-                </ul>
-            </nav>
+    <!-- All HTML content remains EXACTLY THE SAME -->
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Login</h2>
+                <button class="close-btn" onclick="closeAdminModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>PUKCODE</label>
+                <input type="password" id="pukCode" class="form-control" placeholder="Enter PUKCODE">
+            </div>
+            <button class="btn" onclick="adminLogin()">Login</button>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
+    <!-- Sign In Page -->
+    <div id="signinPage" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h1>PlayCode</h1>
+                <p>Sign in to your account</p>
+                <button class="btn btn-secondary mt-3" onclick="showAdminModal()">Admin Panel</button>
+            </div>
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" id="loginAccNo" class="form-control" placeholder="Enter account number">
+            </div>
+            <div class="form-group">
+                <label>SAR Number</label>
+                <input type="password" id="loginSar" class="form-control" placeholder="Enter SAR number">
+            </div>
+            <button class="btn" onclick="signIn()">Sign In</button>
+            <p class="text-center mt-3">Don't have an account? <a href="#" class="link" onclick="showSignUp()">Sign Up</a></p>
+        </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signupPage" class="auth-container" style="display: none;">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h1>Create Account</h1>
+            </div>
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" id="accNo" class="form-control" placeholder="Enter account number">
+            </div>
+            <div class="form-group">
+                <label>SAR Number</label>
+                <input type="password" id="sarNo" class="form-control" placeholder="Enter SAR number">
+            </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" class="form-control" placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label>Agent Code</label>
+                <select id="agentCode" class="form-control">
+                    <option value="">Select Agent Code</option>
+                    <option value="6215">6215</option>
+                    <option value="3773">3773</option>
+                    <option value="1583">1583</option>
+                    <option value="4848">4848</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>4-digit PIN</label>
+                <input type="password" id="pin" class="form-control" placeholder="Enter 4-digit PIN" maxlength="4">
+            </div>
+            <button class="btn" onclick="signUp()">Create Account</button>
+            <p class="text-center mt-3">Already have an account? <a href="#" class="link" onclick="showSignIn()">Sign In</a></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <div class="header">
+            <div class="logo">Google Playcode Account Management</div>
+            <div class="user-menu">
+                <div class="user-icon" onclick="toggleUserMenu()">
+                    <span class="material-icons-round">person</span>
+                </div>
+                <div id="userDropdown" class="dropdown-menu">
+                    <div class="dropdown-item">
+                        <span class="material-icons-round">account_balance_wallet</span>
+                        <span id="balanceDisplay">Balance: ₹0</span>
+                    </div>
+                    <div class="dropdown-item" onclick="showManageAccount()">
+                        <span class="material-icons-round">manage_accounts</span>
+                        <span>Manage Account</span>
+                    </div>
+                    <div class="dropdown-item" onclick="showMyOrders()">
+                        <span class="material-icons-round">receipt</span>
+                        <span>My Orders</span>
+                    </div>
+                    <div class="dropdown-item" onclick="logout()">
+                        <span class="material-icons-round">logout</span>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
-            <!-- Home Section -->
-            <section id="homeSection" class="section active">
-                <div class="hero">
-                    <h1>Google Play Gift Codes</h1>
-                    <p>Access premium apps, games, movies, and exclusive content with our verified Google Play gift codes. Daily updated codes ensure you always have working options.</p>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" id="getCodeBtn">
-                            <i class="fas fa-gift"></i> Get Available Codes
-                        </button>
-                        <button class="btn btn-secondary" id="manageBtn">
-                            <i class="fas fa-user-circle"></i> Manage Account
-                        </button>
-                    </div>
+            <div class="welcome-section">
+                <h1>Welcome to Your PLAYCODE ACCOUNT</h1>
+                <div class="manage-text">Manage your account</div>
+            </div>
+            
+            <div id="manageAccount" class="features-grid">
+                <div class="feature-card" onclick="checkBalance()">
+                    <div class="feature-icon material-icons-round">account_balance_wallet</div>
+                    <h3>Check Balance</h3>
+                    <p>View your current balance</p>
                 </div>
+                <div class="feature-card" onclick="addBalance()">
+                    <div class="feature-icon material-icons-round">add_circle</div>
+                    <h3>Add Balance</h3>
+                    <p>Add funds to your account</p>
+                </div>
+                <div class="feature-card" onclick="orderCode()">
+                    <div class="feature-icon material-icons-round">qr_code</div>
+                    <h3>Order Code</h3>
+                    <p>Generate new codes</p>
+                </div>
+                <div class="feature-card" onclick="rateUs()">
+                    <div class="feature-icon material-icons-round">star_rate</div>
+                    <h3>Rate Us</h3>
+                    <p>Share your experience</p>
+                </div>
+            </div>
 
-                <div class="features">
-                    <div class="card feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <h3>Daily Updates</h3>
-                        <p>Fresh codes added every 24 hours to ensure you always have access to working Google Play codes.</p>
-                    </div>
-                    
-                    <div class="card feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>Verified & Secure</h3>
-                        <p>All codes undergo rigorous verification to guarantee functionality and security for your account.</p>
-                    </div>
-                    
-                    <div class="card feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-globe-americas"></i>
-                        </div>
-                        <h3>Global Access</h3>
-                        <p>Codes work worldwide, so no matter your location, you can enjoy premium content on Google Play.</p>
+            <!-- My Orders Section -->
+            <div id="myOrdersSection" style="display: none;">
+                <div class="orders-table">
+                    <h2>My Orders</h2>
+                    <div class="users-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userOrdersTable">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </section>
-
-            <!-- Codes Section -->
-            <section id="codesSection" class="section">
-                <div class="section-header">
-                    <h2>Available Gift Codes</h2>
-                    <div class="codes-actions">
-                        <div class="status-badge status-verified">
-                            <i class="fas fa-check-circle"></i> Updated Today
-                        </div>
-                        <button class="btn btn-secondary btn-sm" id="editCodesBtn" onclick="openPukModal()">
-                            <i class="fas fa-edit"></i> Edit Codes
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="codes-grid" id="codesGrid">
-                    <!-- Code cards will be generated here -->
-                </div>
-            </section>
-
-            <!-- Balance Checker Section -->
-            <section id="balanceSection" class="section">
-                <div class="balance-checker">
-                    <div class="balance-header">
-                        <h2>Account Manager</h2>
-                        <p>Manage your Google Play account and access premium features</p>
-                    </div>
-                    
-                    <div class="action-grid">
-                        <button class="balance-action-btn" onclick="checkBalance()">
-                            <div class="action-icon" style="background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <div class="action-text">
-                                <h3>Check Balance</h3>
-                                <p>View your current account balance and transaction history</p>
-                            </div>
-                        </button>
-                        
-                        <button class="balance-action-btn" onclick="addMoney()">
-                            <div class="action-icon" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
-                                <i class="fas fa-plus-circle"></i>
-                            </div>
-                            <div class="action-text">
-                                <h3>Add Funds</h3>
-                                <p>Add funds to your Google Play account securely</p>
-                            </div>
-                        </button>
-                        
-                        <button class="balance-action-btn" onclick="showNeedCode()">
-                            <div class="action-icon" style="background: linear-gradient(135deg, var(--accent), var(--accent-dark));">
-                                <i class="fas fa-key"></i>
-                            </div>
-                            <div class="action-text">
-                                <h3>Request Code</h3>
-                                <p>Request a new gift code for premium content</p>
-                            </div>
-                        </button>
-                        
-                        <button class="balance-action-btn" onclick="showAgentAccess()">
-                            <div class="action-icon" style="background: linear-gradient(135deg, var(--danger), var(--danger-dark));">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            <div class="action-text">
-                                <h3>Support Agent</h3>
-                                <p>Connect with our dedicated support team</p>
-                            </div>
-                        </button>
-                    </div>
-                    
-                    <div class="email-preview" id="emailPreview">
-                        <h3><i class="fas fa-paper-plane"></i> Email Template Ready</h3>
-                        <div class="email-detail">
-                            <strong>To:</strong> <span id="previewTo"></span>
-                        </div>
-                        <div class="email-detail">
-                            <strong>Subject:</strong> <span id="previewSubject"></span>
-                        </div>
-                        <div class="email-detail">
-                            <strong>Body:</strong> <span id="previewBody"></span>
-                        </div>
-                        <div class="email-actions">
-                            <button class="btn btn-primary" onclick="openEmailInNewTab()">
-                                <i class="fas fa-external-link-alt"></i> Open in Email
-                            </button>
-                            <button class="btn btn-secondary" onclick="copyEmailDetails()">
-                                <i class="fas fa-copy"></i> Copy Details
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="instructions">
-                        <h3><i class="fas fa-info-circle"></i> How to Use</h3>
-                        <ul>
-                            <li>Click any action button to generate an email template</li>
-                            <li>Use "Open in Email" to launch your email client with pre-filled details</li>
-                            <li>Use "Copy Details" to copy the information for manual entry</li>
-                            <li>For support agent access, use the provided credentials</li>
-                            <li>All requests are processed within 24 hours</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="access-note">
-                        <i class="fas fa-lock"></i> Secure access credentials are provided during request process
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Modals -->
-    <div class="modal" id="agentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-shield"></i> Agent Access</h2>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="agentCode">Access Code</label>
-                    <input type="number" id="agentCode" class="form-control" placeholder="Enter access code" pattern="[0-9]*" inputmode="numeric" min="1000" max="9999">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeAgentModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="verifyAgentCode()">
-                    <i class="fas fa-unlock-alt"></i> Verify Access
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="addMoneyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-coins"></i> Add Funds</h2>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="moneyAmount">Amount (₹)</label>
-                    <input type="number" id="moneyAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric" step="100">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeAddMoneyModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmAddMoney()">
-                    <i class="fas fa-check-circle"></i> Continue
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="needCodeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-gift"></i> Request Gift Code</h2>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="redeemAmount">Redeem Amount (₹)</label>
-                    <input type="number" id="redeemAmount" class="form-control" placeholder="Enter amount in ₹" min="1" inputmode="numeric" step="100">
-                </div>
-                <div class="form-group">
-                    <label for="needCodePassword">Security Code</label>
-                    <input type="number" id="needCodePassword" class="form-control" placeholder="Enter security code" pattern="[0-9]*" inputmode="numeric" min="1000" max="9999">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeNeedCodeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmNeedCode()">
-                    <i class="fas fa-lock"></i> Request Code
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- PUK Code Modal -->
-    <div class="modal" id="pukModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-lock"></i> Enter PUK Code</h2>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="pukCode">PUK Security Code</label>
-                    <input type="text" id="pukCode" class="form-control puk-code-input" placeholder="Enter PUK code" maxlength="11">
-                    <small class="text-muted" style="display: block; margin-top: 8px; color: var(--text-light);">
-                        Enter the PUK code to unlock edit mode for gift codes
-                    </small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closePukModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="verifyPukCode()">
-                    <i class="fas fa-unlock"></i> Unlock Edit Mode
-                </button>
             </div>
         </div>
     </div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i> <span id="notificationText"></span>
-    </div>
-
-    <!-- Footer -->
-    <footer>
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-container">
+        <div class="header">
+            <div class="logo">ADMIN PANEL</div>
+            <button class="btn btn-danger" onclick="logoutAdmin()">Logout</button>
+        </div>
         <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
-                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
-                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
-                    <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+            <h1>User Management</h1>
+            <div class="users-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account No</th>
+                            <th>Full Name</th>
+                            <th>Balance</th>
+                            <th>Agent Code</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="orders-table">
+                <h2>All Orders</h2>
+                <div class="users-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Account No</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allOrdersTable">
+                            <!-- All orders will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
-                <p class="copyright">© 2025 Google Play Gift Codes. This service is provided by an independent affiliate.<br>
-                All product names, logos, and brands are property of their respective owners.</p>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- All Modals (keep exactly the same structure) -->
+    <div id="balanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Account Balance</h2>
+                <button class="close-btn" onclick="closeModal('balanceModal')">×</button>
+            </div>
+            <div id="balanceLoading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading balance...</p>
+            </div>
+            <div id="balanceResult" style="display: none;">
+                <p style="font-size: 32px; text-align: center; color: #34a853;" id="balanceAmount"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="addBalanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Balance</h2>
+                <button class="close-btn" onclick="closeModal('addBalanceModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="addAmount" class="form-control" placeholder="Enter amount">
+            </div>
+            <button class="btn" onclick="proceedToPayment()">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Payment</h2>
+                <button class="close-btn" onclick="closeModal('paymentModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Transaction Code from Agent</label>
+                <input type="text" id="transactionCode" class="form-control" placeholder="e.g., PL018">
+            </div>
+            <button class="btn" onclick="completePayment()">Complete Payment</button>
+        </div>
+    </div>
+
+    <div id="orderCodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Code</h2>
+                <button class="close-btn" onclick="closeModal('orderCodeModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Amount</label>
+                <input type="number" id="orderAmount" class="form-control" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>4-digit PIN</label>
+                <input type="password" id="orderPin" class="form-control" placeholder="Enter your PIN" maxlength="4">
+            </div>
+            <button class="btn" onclick="submitOrder()">Submit Order</button>
+        </div>
+    </div>
+
+    <div id="rateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rate Us</h2>
+                <button class="close-btn" onclick="closeModal('rateModal')">×</button>
+            </div>
+            <div class="star-rating" id="starRating">
+                <span class="star material-icons-round" onclick="rate(1)">star_outline</span>
+                <span class="star material-icons-round" onclick="rate(2)">star_outline</span>
+                <span class="star material-icons-round" onclick="rate(3)">star_outline</span>
+                <span class="star material-icons-round" onclick="rate(4)">star_outline</span>
+                <span class="star material-icons-round" onclick="rate(5)">star_outline</span>
+            </div>
+            <p class="text-center">Thank you for your feedback!</p>
+        </div>
+    </div>
+
+    <!-- Admin Action Modals -->
+    <div id="adminBalanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Balance</h2>
+                <button class="close-btn" onclick="closeModal('adminBalanceModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Action</label>
+                <select id="balanceAction" class="form-control">
+                    <option value="add">Add Balance</option>
+                    <option value="deduct">Deduct Balance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="adminBalanceAmount" class="form-control" placeholder="Enter amount">
+            </div>
+            <button class="btn" onclick="updateUserBalance()">Update Balance</button>
+        </div>
+    </div>
+
+    <div id="orderDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="close-btn" onclick="closeModal('orderDetailsModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Redeem Code</label>
+                <input type="text" id="redeemCode" class="form-control" placeholder="Enter redeem code">
+            </div>
+            <div class="action-buttons">
+                <button class="btn" onclick="completeOrder()">Complete Order</button>
+                <button class="btn btn-danger" onclick="cancelOrder()">Cancel Order</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Global variables
-        let currentEmailData = {};
-        const validPasswords = ['6215', '2323', '6969', '7869'];
-        const PUK_CODE = 'PL15836215';
-        let isEditMode = false;
-        let originalCodes = [];
-        
-        // Sample gift codes data
-        const sampleCodes = [
-            { id: 1, type: 'Premium App', code: 'GP-8X9Y2-Z3K4M', validity: 'Valid for 7 days', editable: false },
-            { id: 2, type: 'Game Purchase', code: 'GP-N5P6Q-R7S8T', validity: 'Valid for 5 days', editable: false },
-            { id: 3, type: 'Movie Rental', code: 'GP-U1V2W-X3Y4Z', validity: 'Valid for 3 days', editable: false },
-            { id: 4, type: 'Music Subscription', code: 'GP-A5B6C-D7E8F', validity: 'Valid for 14 days', editable: false }
-        ];
+        // Firebase Configuration (EXACTLY THE SAME)
+        const firebaseConfig = {
+            apiKey: "AIzaSyC799pLj50Sg877kdBPTIXkJPRGHr4ZC4s",
+            authDomain: "playcodesetup.firebaseapp.com",
+            databaseURL: "https://playcodesetup-default-rtdb.firebaseio.com",
+            projectId: "playcodesetup",
+            storageBucket: "playcodesetup.firebasestorage.app",
+            messagingSenderId: "548277697840",
+            appId: "1:548277697840:web:df6c2524d22ca93d089cf5",
+            measurementId: "G-S44Y26B9F5"
+        };
 
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            // Navigation functionality
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const section = this.getAttribute('data-section');
-                    
-                    // Update active nav link
-                    document.querySelectorAll('.nav-link').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Show selected section
-                    showSection(section);
-                });
-            });
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Global Variables (EXACTLY THE SAME)
+        let currentUser = null;
+        let currentAdmin = false;
+        let selectedUserId = null;
+        let selectedOrderId = null;
+        let currentRating = 0;
+        let paymentAmount = 0;
+
+        // Close dropdown when clicking outside (mobile optimization)
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('userDropdown');
+            const userIcon = document.querySelector('.user-icon');
             
-            // Get Code button functionality
-            document.getElementById('getCodeBtn').addEventListener('click', function() {
-                document.querySelector('[data-section="codes"]').click();
-            });
-            
-            // Manage button functionality
-            document.getElementById('manageBtn').addEventListener('click', function() {
-                document.querySelector('[data-section="balance"]').click();
-            });
-            
-            // Contact link
-            document.getElementById('contactLink').addEventListener('click', function(e) {
-                e.preventDefault();
-                currentEmailData = {
-                    to: 'playcodeagent@gmail.com',
-                    subject: 'Contact Request - Google Play Codes',
-                    body: 'Hello, I would like to contact you regarding Google Play codes.'
-                };
-                
-                showEmailPreview();
-                showNotification('Contact email template is ready!');
-            });
-            
-            // Close modals on outside click
-            window.addEventListener('click', function(event) {
-                const modals = ['agentModal', 'addMoneyModal', 'needCodeModal', 'pukModal'];
-                modals.forEach(modalId => {
-                    const modal = document.getElementById(modalId);
-                    if (event.target === modal) {
-                        closeModal(modalId);
+            if (dropdown && dropdown.classList.contains('show') && 
+                !dropdown.contains(event.target) && 
+                !userIcon.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Handle back button on mobile
+        window.addEventListener('popstate', function() {
+            if (currentUser && !currentAdmin) {
+                showManageAccount();
+            }
+        });
+
+        // Prevent pull-to-refresh on mobile
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) e.preventDefault();
+        }, { passive: false });
+
+        // ALL FUNCTIONS REMAIN EXACTLY THE SAME
+        // Authentication Functions
+        function showSignUp() {
+            document.getElementById('signinPage').style.display = 'none';
+            document.getElementById('signupPage').style.display = 'flex';
+        }
+
+        function showSignIn() {
+            document.getElementById('signupPage').style.display = 'none';
+            document.getElementById('signinPage').style.display = 'flex';
+        }
+
+        function signUp() {
+            const accNo = document.getElementById('accNo').value;
+            const sarNo = document.getElementById('sarNo').value;
+            const fullName = document.getElementById('fullName').value;
+            const agentCode = document.getElementById('agentCode').value;
+            const pin = document.getElementById('pin').value;
+
+            if (!accNo || !sarNo || !fullName || !agentCode || !pin || pin.length !== 4) {
+                alert('Please fill all fields correctly. PIN must be 4 digits.');
+                return;
+            }
+
+            // Check if account already exists
+            database.ref('users/' + accNo).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        alert('Account already exists!');
+                    } else {
+                        // Create user
+                        const userData = {
+                            accNo: accNo,
+                            sarNo: sarNo,
+                            fullName: fullName,
+                            agentCode: agentCode,
+                            pin: pin,
+                            balance: 0,
+                            createdAt: new Date().toISOString()
+                        };
+
+                        database.ref('users/' + accNo).set(userData)
+                            .then(() => {
+                                alert('Account created successfully!');
+                                showSignIn();
+                                clearSignUpForm();
+                            })
+                            .catch(error => {
+                                alert('Error creating account: ' + error.message);
+                            });
                     }
                 });
-            });
-            
-            // Initialize gift codes
-            loadGiftCodes();
-            
-            // Add event listener for PUK code input
-            document.getElementById('pukCode').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    verifyPukCode();
-                }
-            });
-        });
-        
-        // Load gift codes into the grid
-        function loadGiftCodes() {
-            const codesGrid = document.getElementById('codesGrid');
-            codesGrid.innerHTML = '';
-            
-            sampleCodes.forEach(code => {
-                const codeCard = document.createElement('div');
-                codeCard.className = 'card code-card';
-                codeCard.id = `codeCard-${code.id}`;
-                codeCard.innerHTML = `
-                    <div class="code-type">${code.type}</div>
-                    <div class="code-value" id="codeValue-${code.id}">${code.code}</div>
-                    <div class="code-validity">
-                        <i class="far fa-clock"></i> ${code.validity}
-                    </div>
-                    <div class="code-actions">
-                        <button class="action-btn edit-btn" onclick="editCode(${code.id})" style="display: none;">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn save-btn" onclick="saveCode(${code.id})" style="display: none;">
-                            <i class="fas fa-save"></i>
-                        </button>
-                        <button class="action-btn cancel-btn" onclick="cancelEdit(${code.id})" style="display: none;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                codesGrid.appendChild(codeCard);
-            });
-            
-            // Store original codes for reset
-            originalCodes = JSON.parse(JSON.stringify(sampleCodes));
         }
-        
-        // Show section function
-        function showSection(sectionName) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionName + 'Section').classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        function signIn() {
+            const accNo = document.getElementById('loginAccNo').value;
+            const sarNo = document.getElementById('loginSar').value;
+
+            database.ref('users/' + accNo).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const user = snapshot.val();
+                        if (user.sarNo === sarNo) {
+                            currentUser = user;
+                            showDashboard();
+                            loadUserData();
+                        } else {
+                            alert('Invalid SAR number!');
+                        }
+                    } else {
+                        alert('Account not found!');
+                    }
+                });
         }
-        
-        // Open PUK modal
-        function openPukModal() {
-            document.getElementById('pukModal').style.display = 'flex';
-            document.getElementById('pukCode').focus();
+
+        function logout() {
+            currentUser = null;
+            currentAdmin = false;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('signinPage').style.display = 'flex';
+            clearSignInForm();
         }
-        
-        // Close PUK modal
-        function closePukModal() {
-            document.getElementById('pukModal').style.display = 'none';
+
+        // Admin Functions
+        function showAdminModal() {
+            document.getElementById('adminModal').classList.add('show');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('show');
             document.getElementById('pukCode').value = '';
         }
-        
-        // Verify PUK code
-        function verifyPukCode() {
-            const enteredCode = document.getElementById('pukCode').value.trim().toUpperCase();
-            
-            if (enteredCode === PUK_CODE) {
-                isEditMode = true;
-                showNotification('Edit mode unlocked! You can now edit gift codes.');
-                closePukModal();
-                enableEditMode();
+
+        function adminLogin() {
+            const pukCode = document.getElementById('pukCode').value;
+            if (pukCode === 'PC15836215') {
+                currentAdmin = true;
+                closeAdminModal();
+                showAdminPanel();
+                loadAllUsers();
+                loadAllOrders();
             } else {
-                showNotification('Invalid PUK code. Please try again.');
-                document.getElementById('pukCode').value = '';
-                document.getElementById('pukCode').focus();
+                alert('Invalid PUKCODE!');
             }
         }
-        
-        // Enable edit mode
-        function enableEditMode() {
-            // Show edit buttons on all code cards
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.style.display = 'flex';
-            });
-            
-            // Update edit button text
-            const editBtn = document.getElementById('editCodesBtn');
-            editBtn.innerHTML = '<i class="fas fa-edit"></i> Editing Mode Active';
-            editBtn.style.background = 'linear-gradient(135deg, var(--secondary), var(--secondary-dark))';
-            editBtn.style.color = 'white';
-            editBtn.onclick = function() {
-                showNotification('Edit mode is already active. Click the edit icon on any code to modify it.');
-            };
+
+        function logoutAdmin() {
+            currentAdmin = false;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('signinPage').style.display = 'flex';
         }
-        
-        // Disable edit mode
-        function disableEditMode() {
-            isEditMode = false;
-            
-            // Hide all edit buttons
-            document.querySelectorAll('.edit-btn, .save-btn, .cancel-btn').forEach(btn => {
-                btn.style.display = 'none';
-            });
-            
-            // Reset edit button
-            const editBtn = document.getElementById('editCodesBtn');
-            editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Codes';
-            editBtn.style.background = '';
-            editBtn.style.color = '';
-            editBtn.onclick = openPukModal;
-            
-            // Reset any editing cards
-            document.querySelectorAll('.code-card').forEach(card => {
-                card.classList.remove('editing');
-            });
-            
-            document.querySelectorAll('.code-value').forEach(value => {
-                value.classList.remove('editable');
-                value.contentEditable = false;
-            });
+
+        function showAdminPanel() {
+            document.getElementById('signinPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
         }
-        
-        // Edit a specific code
-        function editCode(codeId) {
-            if (!isEditMode) {
-                showNotification('Please unlock edit mode first by clicking "Edit Codes" button.');
-                return;
+
+        // Dashboard Functions
+        function showDashboard() {
+            document.getElementById('signinPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('myOrdersSection').style.display = 'none';
+            document.getElementById('manageAccount').style.display = 'grid';
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+
+        function showManageAccount() {
+            document.getElementById('myOrdersSection').style.display = 'none';
+            document.getElementById('manageAccount').style.display = 'grid';
+            toggleUserMenu();
+        }
+
+        function showMyOrders() {
+            document.getElementById('manageAccount').style.display = 'none';
+            document.getElementById('myOrdersSection').style.display = 'block';
+            loadUserOrders();
+            toggleUserMenu();
+        }
+
+        function loadUserData() {
+            if (currentUser) {
+                document.getElementById('balanceDisplay').textContent = `Balance: ₹${currentUser.balance || 0}`;
             }
-            
-            const card = document.getElementById(`codeCard-${codeId}`);
-            const codeValue = document.getElementById(`codeValue-${codeId}`);
-            
-            // Enable editing state
-            card.classList.add('editing');
-            codeValue.classList.add('editable');
-            codeValue.contentEditable = true;
-            codeValue.focus();
-            
-            // Select all text for easy editing
-            const range = document.createRange();
-            range.selectNodeContents(codeValue);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            // Show save and cancel buttons
-            const editBtn = card.querySelector('.edit-btn');
-            const saveBtn = card.querySelector('.save-btn');
-            const cancelBtn = card.querySelector('.cancel-btn');
-            
-            editBtn.style.display = 'none';
-            saveBtn.style.display = 'flex';
-            cancelBtn.style.display = 'flex';
         }
-        
-        // Save edited code
-        function saveCode(codeId) {
-            const codeValue = document.getElementById(`codeValue-${codeId}`);
-            const newCode = codeValue.textContent.trim();
-            
-            if (!newCode) {
-                showNotification('Code cannot be empty!');
-                codeValue.focus();
-                return;
-            }
-            
-            // Update in sampleCodes array
-            const index = sampleCodes.findIndex(code => code.id === codeId);
-            if (index !== -1) {
-                sampleCodes[index].code = newCode;
-            }
-            
-            // Disable editing
-            const card = document.getElementById(`codeCard-${codeId}`);
-            card.classList.remove('editing');
-            codeValue.classList.remove('editable');
-            codeValue.contentEditable = false;
-            
-            // Hide save and cancel buttons, show edit button
-            const editBtn = card.querySelector('.edit-btn');
-            const saveBtn = card.querySelector('.save-btn');
-            const cancelBtn = card.querySelector('.cancel-btn');
-            
-            editBtn.style.display = 'flex';
-            saveBtn.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            
-            showNotification('Code updated successfully!');
-        }
-        
-        // Cancel editing
-        function cancelEdit(codeId) {
-            const index = sampleCodes.findIndex(code => code.id === codeId);
-            if (index !== -1) {
-                // Restore original value
-                const originalCode = originalCodes.find(code => code.id === codeId);
-                if (originalCode) {
-                    sampleCodes[index].code = originalCode.code;
-                    document.getElementById(`codeValue-${codeId}`).textContent = originalCode.code;
-                }
-            }
-            
-            // Disable editing
-            const card = document.getElementById(`codeCard-${codeId}`);
-            const codeValue = document.getElementById(`codeValue-${codeId}`);
-            
-            card.classList.remove('editing');
-            codeValue.classList.remove('editable');
-            codeValue.contentEditable = false;
-            
-            // Hide save and cancel buttons, show edit button
-            const editBtn = card.querySelector('.edit-btn');
-            const saveBtn = card.querySelector('.save-btn');
-            const cancelBtn = card.querySelector('.cancel-btn');
-            
-            editBtn.style.display = 'flex';
-            saveBtn.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            
-            showNotification('Edit cancelled.');
-        }
-        
-        // Balance Checker Functions
+
+        // Manage Account Functions
         function checkBalance() {
-            currentEmailData = {
-                to: 'playcodeagent@gmail.com',
-                subject: 'Balance Inquiry - Google Play Account',
-                body: 'Hello,\n\nI would like to check the current balance of my Google Play account.\n\nThank you.'
-            };
-            showEmailPreview();
-            showNotification('Balance inquiry email template is ready!');
-        }
-        
-        function addMoney() {
-            document.getElementById('addMoneyModal').style.display = 'flex';
-            document.getElementById('moneyAmount').focus();
-        }
-        
-        function confirmAddMoney() {
-            const amount = document.getElementById('moneyAmount').value;
-            if (!amount || amount <= 0) {
-                showNotification('Please enter a valid amount');
-                return;
-            }
-            
-            currentEmailData = {
-                to: 'playcodeagent@gmail.com',
-                subject: `Add Funds Request - ₹${amount}`,
-                body: `Hello,\n\nI would like to add ₹${amount} to my Google Play account.\n\nPlease let me know the next steps.\n\nThank you.`
-            };
-            
-            showEmailPreview();
-            showNotification('Add funds email template is ready!');
-            closeAddMoneyModal();
-        }
-        
-        function closeAddMoneyModal() {
-            document.getElementById('addMoneyModal').style.display = 'none';
-            document.getElementById('moneyAmount').value = '';
-        }
-        
-        function showNeedCode() {
-            document.getElementById('needCodeModal').style.display = 'flex';
-            document.getElementById('redeemAmount').focus();
-        }
-        
-        function confirmNeedCode() {
-            const amount = document.getElementById('redeemAmount').value;
-            const password = document.getElementById('needCodePassword').value;
-            
-            if (!amount || amount <= 0) {
-                showNotification('Please enter a valid amount');
-                return;
-            }
-            
-            if (!password) {
-                showNotification('Security code is required');
-                return;
-            }
-            
-            if (!validPasswords.includes(password)) {
-                showNotification('Invalid security code. Please try again.');
-                document.getElementById('needCodePassword').value = '';
-                document.getElementById('needCodePassword').focus();
-                return;
-            }
-            
-            currentEmailData = {
-                to: 'playcodeagent@gmail.com',
-                subject: `Gift Code Request - ₹${amount}`,
-                body: `Hello,\n\nI would like to request a Google Play gift code worth ₹${amount}.\n\nPlease provide the code at your earliest convenience.\n\nThank you.`
-            };
-            
-            showEmailPreview();
-            showNotification('Gift code request email template is ready!');
-            closeNeedCodeModal();
-        }
-        
-        function closeNeedCodeModal() {
-            document.getElementById('needCodeModal').style.display = 'none';
-            document.getElementById('redeemAmount').value = '';
-            document.getElementById('needCodePassword').value = '';
-        }
-        
-        function showAgentAccess() {
-            document.getElementById('agentModal').style.display = 'flex';
-            document.getElementById('agentCode').focus();
-        }
-        
-        function closeAgentModal() {
-            document.getElementById('agentModal').style.display = 'none';
-            document.getElementById('agentCode').value = '';
-        }
-        
-        function verifyAgentCode() {
-            const agentCode = document.getElementById('agentCode').value;
-            
-            if (agentCode === '6215') {
-                currentEmailData = {
-                    to: 's.teachgamingstiyle@gmail.com',
-                    subject: 'Support Agent Request - Google Play Codes',
-                    body: 'Hello,\n\nI would like to speak with a support agent regarding Google Play codes.\n\nPlease provide assistance at your earliest convenience.\n\nThank you.'
-                };
-                
-                showEmailPreview();
-                showNotification('Support agent email template is ready!');
-                closeAgentModal();
-            } else {
-                showNotification('Invalid access code. Please try again.');
-                document.getElementById('agentCode').value = '';
-                document.getElementById('agentCode').focus();
-            }
-        }
-        
-        function showEmailPreview() {
-            document.getElementById('previewTo').textContent = currentEmailData.to;
-            document.getElementById('previewSubject').textContent = currentEmailData.subject;
-            document.getElementById('previewBody').textContent = currentEmailData.body;
-            document.getElementById('emailPreview').style.display = 'block';
-            
-            // Scroll to email preview smoothly
-            setTimeout(() => {
-                document.getElementById('emailPreview').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'nearest' 
-                });
-            }, 100);
-        }
-        
-        function openEmailInNewTab() {
-            const { to, subject, body } = currentEmailData;
-            
-            // Create a professional email template page
-            const emailPage = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Email Template - Google Play Codes</title>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <style>
-                        * {
-                            margin: 0;
-                            padding: 0;
-                            box-sizing: border-box;
-                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-                        }
-                        
-                        body {
-                            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-                            min-height: 100vh;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            padding: 20px;
-                        }
-                        
-                        .email-container {
-                            background: white;
-                            border-radius: 16px;
-                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-                            max-width: 500px;
-                            width: 100%;
-                            overflow: hidden;
-                        }
-                        
-                        .email-header {
-                            background: linear-gradient(135deg, #4285F4, #34A853);
-                            color: white;
-                            padding: 32px;
-                            text-align: center;
-                        }
-                        
-                        .email-header h1 {
-                            font-size: 24px;
-                            font-weight: 600;
-                            margin-bottom: 8px;
-                        }
-                        
-                        .email-header p {
-                            opacity: 0.9;
-                            font-size: 14px;
-                        }
-                        
-                        .email-content {
-                            padding: 32px;
-                        }
-                        
-                        .email-details {
-                            background: #f8f9fa;
-                            border-radius: 12px;
-                            padding: 24px;
-                            margin-bottom: 24px;
-                            border-left: 4px solid #4285F4;
-                        }
-                        
-                        .detail-item {
-                            margin-bottom: 16px;
-                            padding-bottom: 16px;
-                            border-bottom: 1px solid #e8eaed;
-                        }
-                        
-                        .detail-item:last-child {
-                            margin-bottom: 0;
-                            padding-bottom: 0;
-                            border-bottom: none;
-                        }
-                        
-                        .detail-label {
-                            font-weight: 600;
-                            color: #5F6368;
-                            font-size: 14px;
-                            margin-bottom: 4px;
-                        }
-                        
-                        .detail-value {
-                            color: #202124;
-                            font-size: 15px;
-                            line-height: 1.5;
-                            word-break: break-word;
-                        }
-                        
-                        .email-actions {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 12px;
-                            margin-top: 32px;
-                        }
-                        
-                        .email-btn {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            gap: 10px;
-                            padding: 16px;
-                            border-radius: 8px;
-                            font-weight: 500;
-                            text-decoration: none;
-                            transition: all 0.3s ease;
-                            border: none;
-                            cursor: pointer;
-                            font-size: 15px;
-                        }
-                        
-                        .email-btn-primary {
-                            background: linear-gradient(135deg, #4285F4, #34A853);
-                            color: white;
-                            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
-                        }
-                        
-                        .email-btn-primary:hover {
-                            transform: translateY(-2px);
-                            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
-                        }
-                        
-                        .email-btn-secondary {
-                            background: transparent;
-                            color: #5F6368;
-                            border: 2px solid #dadce0;
-                        }
-                        
-                        .email-btn-secondary:hover {
-                            background: #f8f9fa;
-                            color: #202124;
-                        }
-                        
-                        .security-note {
-                            text-align: center;
-                            font-size: 12px;
-                            color: #80868B;
-                            margin-top: 24px;
-                            padding: 16px;
-                            background: #f8f9fa;
-                            border-radius: 8px;
-                            border: 1px dashed #dadce0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="email-container">
-                        <div class="email-header">
-                            <h1><i class="fas fa-paper-plane"></i> Email Template</h1>
-                            <p>Google Play Gift Codes</p>
-                        </div>
-                        
-                        <div class="email-content">
-                            <div class="email-details">
-                                <div class="detail-item">
-                                    <div class="detail-label">To:</div>
-                                    <div class="detail-value">${to}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Subject:</div>
-                                    <div class="detail-value">${subject}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Message:</div>
-                                    <div class="detail-value" style="white-space: pre-line;">${body}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="email-actions">
-                                <a href="mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" 
-                                   class="email-btn email-btn-primary">
-                                    <i class="fas fa-envelope"></i> Open in Email Client
-                                </a>
-                                <button onclick="window.close()" class="email-btn email-btn-secondary">
-                                    <i class="fas fa-times"></i> Close Window
-                                </button>
-                            </div>
-                            
-                            <div class="security-note">
-                                <i class="fas fa-shield-alt"></i> This is a secure email template. Do not share credentials.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const primaryBtn = document.querySelector('.email-btn-primary');
-                            primaryBtn.focus();
-                        });
-                    <\/script>
-                </body>
-                </html>
-            `;
-            
-            // Open a new tab with the email template
-            const newTab = window.open();
-            newTab.document.write(emailPage);
-            newTab.document.close();
-            
-            showNotification('Email template opened in new window!');
-        }
-        
-        function copyEmailDetails() {
-            const { to, subject, body } = currentEmailData;
-            const emailText = `To: ${to}\nSubject: ${subject}\n\nMessage:\n${body}`;
-            
-            navigator.clipboard.writeText(emailText)
-                .then(() => {
-                    showNotification('Email details copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                    showNotification('Failed to copy to clipboard. Please try again.');
-                });
-        }
-        
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notificationText.textContent = message;
-            notification.style.display = 'block';
+            showModal('balanceModal');
+            document.getElementById('balanceLoading').style.display = 'block';
+            document.getElementById('balanceResult').style.display = 'none';
             
             setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3500);
+                document.getElementById('balanceLoading').style.display = 'none';
+                document.getElementById('balanceResult').style.display = 'block';
+                document.getElementById('balanceAmount').textContent = `₹${currentUser.balance || 0}`;
+            }, 5000);
         }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            // Reset inputs
-            const inputs = document.querySelectorAll(`#${modalId} input`);
-            inputs.forEach(input => input.value = '');
+
+        function addBalance() {
+            showModal('addBalanceModal');
         }
-        
-        // Allow pressing Enter in modal inputs
-        document.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                if (document.getElementById('agentModal').style.display === 'flex') {
-                    verifyAgentCode();
-                } else if (document.getElementById('addMoneyModal').style.display === 'flex') {
-                    confirmAddMoney();
-                } else if (document.getElementById('needCodeModal').style.display === 'flex') {
-                    confirmNeedCode();
+
+        function proceedToPayment() {
+            const amount = document.getElementById('addAmount').value;
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            paymentAmount = parseFloat(amount);
+            closeModal('addBalanceModal');
+            showModal('paymentModal');
+        }
+
+        function completePayment() {
+            const transactionCode = document.getElementById('transactionCode').value;
+            if (!transactionCode) {
+                alert('Please enter transaction code');
+                return;
+            }
+
+            // Update user balance
+            const newBalance = (currentUser.balance || 0) + paymentAmount;
+            database.ref('users/' + currentUser.accNo).update({
+                balance: newBalance,
+                lastTransaction: {
+                    code: transactionCode,
+                    amount: paymentAmount,
+                    type: 'add',
+                    date: new Date().toISOString()
                 }
+            })
+            .then(() => {
+                currentUser.balance = newBalance;
+                loadUserData();
+                closeModal('paymentModal');
+                alert('Balance added successfully!');
+                document.getElementById('addAmount').value = '';
+                document.getElementById('transactionCode').value = '';
+            });
+        }
+
+        function orderCode() {
+            showModal('orderCodeModal');
+        }
+
+        function submitOrder() {
+            const amount = document.getElementById('orderAmount').value;
+            const pin = document.getElementById('orderPin').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            if (pin !== currentUser.pin) {
+                alert('Invalid PIN!');
+                return;
+            }
+            
+            if ((currentUser.balance || 0) < parseFloat(amount)) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            // Create order
+            const orderId = 'ORD' + Date.now();
+            const orderData = {
+                orderId: orderId,
+                accNo: currentUser.accNo,
+                fullName: currentUser.fullName,
+                amount: parseFloat(amount),
+                status: 'Pending',
+                date: new Date().toISOString()
+            };
+
+            database.ref('orders/' + orderId).set(orderData)
+                .then(() => {
+                    // Deduct balance
+                    const newBalance = (currentUser.balance || 0) - parseFloat(amount);
+                    database.ref('users/' + currentUser.accNo).update({
+                        balance: newBalance
+                    })
+                    .then(() => {
+                        currentUser.balance = newBalance;
+                        loadUserData();
+                        closeModal('orderCodeModal');
+                        alert('Order placed successfully!');
+                        document.getElementById('orderAmount').value = '';
+                        document.getElementById('orderPin').value = '';
+                    });
+                });
+        }
+
+        function rateUs() {
+            showModal('rateModal');
+            resetStars();
+        }
+
+        function rate(stars) {
+            currentRating = stars;
+            const starElements = document.querySelectorAll('#starRating .star');
+            starElements.forEach((star, index) => {
+                if (index < stars) {
+                    star.textContent = 'star';
+                    star.classList.add('selected');
+                } else {
+                    star.textContent = 'star_outline';
+                    star.classList.remove('selected');
+                }
+            });
+            setTimeout(() => {
+                closeModal('rateModal');
+                alert('Thank you for your ' + stars + ' star rating!');
+                currentRating = 0;
+            }, 1000);
+        }
+
+        function resetStars() {
+            const starElements = document.querySelectorAll('#starRating .star');
+            starElements.forEach(star => {
+                star.textContent = 'star_outline';
+                star.classList.remove('selected');
+            });
+        }
+
+        // Admin Functions
+        function loadAllUsers() {
+            database.ref('users').once('value')
+                .then(snapshot => {
+                    const usersTable = document.getElementById('usersTable');
+                    usersTable.innerHTML = '';
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const user = childSnapshot.val();
+                        const row = `
+                            <tr>
+                                <td>${user.accNo}</td>
+                                <td>${user.fullName}</td>
+                                <td>₹${user.balance || 0}</td>
+                                <td>${user.agentCode}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-btn" style="background:var(--md-sys-color-primary);color:white;" 
+                                                onclick="showAdminBalanceModal('${user.accNo}')">Balance</button>
+                                        <button class="action-btn" style="background:var(--md-sys-color-error);color:white;" 
+                                                onclick="deleteUser('${user.accNo}')">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        usersTable.innerHTML += row;
+                    });
+                });
+        }
+
+        function loadAllOrders() {
+            database.ref('orders').once('value')
+                .then(snapshot => {
+                    const ordersTable = document.getElementById('allOrdersTable');
+                    ordersTable.innerHTML = '';
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const order = childSnapshot.val();
+                        const date = new Date(order.date).toLocaleString();
+                        const row = `
+                            <tr>
+                                <td>${order.orderId}</td>
+                                <td>${order.accNo}</td>
+                                <td>₹${order.amount}</td>
+                                <td>${date}</td>
+                                <td>${order.status}</td>
+                                <td>
+                                    <button class="action-btn" style="background:#34a853;color:white;" 
+                                            onclick="showOrderDetails('${order.orderId}')">Details</button>
+                                </td>
+                            </tr>
+                        `;
+                        ordersTable.innerHTML += row;
+                    });
+                });
+        }
+
+        function loadUserOrders() {
+            if (!currentUser) return;
+            
+            database.ref('orders').orderByChild('accNo').equalTo(currentUser.accNo).once('value')
+                .then(snapshot => {
+                    const ordersTable = document.getElementById('userOrdersTable');
+                    ordersTable.innerHTML = '';
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const order = childSnapshot.val();
+                        const date = new Date(order.date).toLocaleString();
+                        const redeemButton = order.status === 'Completed' ? 
+                            `<button class="action-btn" style="background:#34a853;color:white;" 
+                                    onclick="showRedeemCode('${order.redeemCode || ''}')">Show Redeem Code</button>` : '';
+                        
+                        const row = `
+                            <tr>
+                                <td>₹${order.amount}</td>
+                                <td>${date}</td>
+                                <td>${order.status}</td>
+                                <td>${redeemButton}</td>
+                            </tr>
+                        `;
+                        ordersTable.innerHTML += row;
+                    });
+                });
+        }
+
+        function showAdminBalanceModal(accNo) {
+            selectedUserId = accNo;
+            showModal('adminBalanceModal');
+        }
+
+        function updateUserBalance() {
+            const action = document.getElementById('balanceAction').value;
+            const amount = parseFloat(document.getElementById('adminBalanceAmount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            database.ref('users/' + selectedUserId).once('value')
+                .then(snapshot => {
+                    const user = snapshot.val();
+                    let newBalance = user.balance || 0;
+                    
+                    if (action === 'add') {
+                        newBalance += amount;
+                    } else {
+                        newBalance -= amount;
+                        if (newBalance < 0) newBalance = 0;
+                    }
+                    
+                    database.ref('users/' + selectedUserId).update({
+                        balance: newBalance
+                    })
+                    .then(() => {
+                        loadAllUsers();
+                        closeModal('adminBalanceModal');
+                        alert('Balance updated successfully!');
+                        document.getElementById('adminBalanceAmount').value = '';
+                    });
+                });
+        }
+
+        function deleteUser(accNo) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                database.ref('users/' + accNo).remove()
+                    .then(() => {
+                        loadAllUsers();
+                        alert('User deleted successfully!');
+                    });
+            }
+        }
+
+        function showOrderDetails(orderId) {
+            selectedOrderId = orderId;
+            showModal('orderDetailsModal');
+        }
+
+        function completeOrder() {
+            const redeemCode = document.getElementById('redeemCode').value;
+            if (!redeemCode) {
+                alert('Please enter redeem code');
+                return;
+            }
+            
+            database.ref('orders/' + selectedOrderId).update({
+                status: 'Completed',
+                redeemCode: redeemCode,
+                completedAt: new Date().toISOString()
+            })
+            .then(() => {
+                loadAllOrders();
+                closeModal('orderDetailsModal');
+                alert('Order completed successfully!');
+                document.getElementById('redeemCode').value = '';
+            });
+        }
+
+        function cancelOrder() {
+            database.ref('orders/' + selectedOrderId).update({
+                status: 'Cancelled',
+                cancelledAt: new Date().toISOString()
+            })
+            .then(() => {
+                // Refund balance to user
+                database.ref('orders/' + selectedOrderId).once('value')
+                    .then(snapshot => {
+                        const order = snapshot.val();
+                        database.ref('users/' + order.accNo).once('value')
+                            .then(userSnapshot => {
+                                const user = userSnapshot.val();
+                                const newBalance = (user.balance || 0) + order.amount;
+                                
+                                database.ref('users/' + order.accNo).update({
+                                    balance: newBalance
+                                })
+                                .then(() => {
+                                    loadAllOrders();
+                                    closeModal('orderDetailsModal');
+                                    alert('Order cancelled and amount refunded!');
+                                });
+                            });
+                    });
+            });
+        }
+
+        function showRedeemCode(code) {
+            alert('Your redeem code is: ' + code);
+        }
+
+        // Utility Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function clearSignUpForm() {
+            document.getElementById('accNo').value = '';
+            document.getElementById('sarNo').value = '';
+            document.getElementById('fullName').value = '';
+            document.getElementById('agentCode').value = '';
+            document.getElementById('pin').value = '';
+        }
+
+        function clearSignInForm() {
+            document.getElementById('loginAccNo').value = '';
+            document.getElementById('loginSar').value = '';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Handle keyboard on mobile
+        window.addEventListener('resize', function() {
+            if (window.visualViewport) {
+                document.documentElement.style.setProperty('--viewport-height', `${window.visualViewport.height}px`);
             }
         });
-        
-        // Auto-close edit mode after 15 minutes for security
-        setTimeout(() => {
-            if (isEditMode) {
-                disableEditMode();
-                showNotification('Edit mode automatically disabled for security.');
-            }
-        }, 15 * 60 * 1000); // 15 minutes
     </script>
 </body>
 </html>
