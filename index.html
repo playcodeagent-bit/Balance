@@ -2666,7 +2666,7 @@
             document.body.removeChild(textarea);
         }
 
-        // Pay to Friend Functions
+        // Pay to Friend Functions - FIXED DOUBLE DEDUCTION ISSUE
         function payToFriend() {
             // Clear previous data
             document.getElementById('friendAccNo').value = '';
@@ -2836,8 +2836,11 @@
                     const senderTransactionId = 'TX' + timestamp + 'S';
                     const receiverTransactionId = 'TX' + timestamp + 'R';
                     
-                    // Update sender's balance
+                    // Calculate new balances
                     const senderNewBalance = currentBalance - amount;
+                    const receiverNewBalance = friendBalance + amount;
+                    
+                    // Create sender transaction record
                     const senderTransaction = {
                         transactionId: senderTransactionId,
                         accNo: currentUser.accNo,
@@ -2850,8 +2853,7 @@
                         recipientAccNo: friendAccNo
                     };
                     
-                    // Update receiver's balance
-                    const receiverNewBalance = friendBalance + amount;
+                    // Create receiver transaction record
                     const receiverTransaction = {
                         transactionId: receiverTransactionId,
                         accNo: friendAccNo,
@@ -2874,9 +2876,8 @@
                     return database.ref().update(updates);
                 })
                 .then(() => {
-                    // Update local user data
-                    currentUser.balance = currentUser.balance - amount;
-                    updateBalanceDisplay();
+                    // CORRECTED: Only update local balance once (Firebase listener will handle UI update)
+                    // The real-time listener in initRealTimeListeners will update the UI automatically
                     
                     // Close modal and show success
                     closeModal('payToFriendModal');
