@@ -1016,14 +1016,40 @@
                     <p class="text-muted text-sm mb-1">You are adding</p>
                     <h3 class="font-semibold text-success" id="methodAmountDisplay" style="font-size: 24px;">₹0</h3>
                 </div>
-                <div style="display: flex; gap: 16px;">
-                    <div class="payment-method-btn" onclick="openUPIPayment()">
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div class="payment-method-btn" style="flex: 1; min-width: 100px;" onclick="openUPIPayment()">
                         <span class="material-icons-round">qr_code_scanner</span>
-                        <span>Pay via UPI</span>
+                        <span>UPI QR</span>
                     </div>
-                    <div class="payment-method-btn" onclick="openAgentPayment()">
+                    <div class="payment-method-btn" style="flex: 1; min-width: 100px;" onclick="openUPIAppPayment()">
+                        <span class="material-icons-round">touch_app</span>
+                        <span>UPI App</span>
+                    </div>
+                    <div class="payment-method-btn" style="flex: 1; min-width: 100px;" onclick="openAgentPayment()">
                         <span class="material-icons-round">support_agent</span>
-                        <span>Pay via Agent</span>
+                        <span>Agent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="upiAppSelectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">Select UPI App</h2><button class="modal-close" onclick="closeModal('upiAppSelectionModal')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="payment-method-btn" onclick="openSpecificUPIApp('gpay')" style="flex-direction: row; justify-content: flex-start; padding: 16px; width: 100%;">
+                        <span class="material-icons-round" style="margin-right: 16px;">account_balance_wallet</span>
+                        <span>Google Pay</span>
+                    </div>
+                    <div class="payment-method-btn" onclick="openSpecificUPIApp('phonepe')" style="flex-direction: row; justify-content: flex-start; padding: 16px; width: 100%;">
+                        <span class="material-icons-round" style="margin-right: 16px;">bolt</span>
+                        <span>PhonePe</span>
+                    </div>
+                    <div class="payment-method-btn" onclick="openSpecificUPIApp('other')" style="flex-direction: row; justify-content: flex-start; padding: 16px; width: 100%;">
+                        <span class="material-icons-round" style="margin-right: 16px;">apps</span>
+                        <span>Other UPI Apps</span>
                     </div>
                 </div>
             </div>
@@ -1575,6 +1601,47 @@
                     document.getElementById('upiFooterSection').style.display = 'flex';
                 }
             }, 1000);
+        }
+
+        // --- UPI APP INTEGRATION ---
+        function openUPIAppPayment() {
+            closeModal('paymentMethodModal');
+            showModal('upiAppSelectionModal');
+        }
+
+        function openSpecificUPIApp(app) {
+            const upiId = 'amitrakhi83@oksbi';
+            const name = 'Playcode Agent';
+            const amount = paymentAmount;
+            let uri = '';
+
+            if (app === 'gpay') {
+                uri = `tez://upi/pay?pa=${upiId}&pn=${name}&am=${amount}`;
+            } else if (app === 'phonepe') {
+                uri = `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}`;
+            } else {
+                uri = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}`;
+            }
+
+            // Redirect to open the UPI app
+            window.location.href = uri;
+
+            // Close app selection modal
+            closeModal('upiAppSelectionModal');
+
+            // Show the existing UTR verification form so user can complete payment
+            document.getElementById('upiAmountText').innerText = formatINR(paymentAmount);
+            document.getElementById('upiFinalAmountDisplay').innerText = formatINR(paymentAmount);
+            
+            document.getElementById('upiQrSection').style.display = 'none';
+            document.getElementById('upiFormSection').style.display = 'block';
+            document.getElementById('upiFooterSection').style.display = 'flex';
+            document.getElementById('userUpiId').value = '';
+            document.getElementById('userUtrId').value = '';
+            
+            // Clear timer if any existing
+            clearInterval(upiTimerInterval);
+            showModal('upiPaymentModal');
         }
 
         function submitUPIPayment() {
