@@ -317,6 +317,15 @@
         .action-btn-primary { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); } 
         .action-btn-danger { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); } 
         .action-btn-success { background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); }
+
+        /* Custom PIN Keypad Styles */
+        .keypad-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 320px; margin: 0 auto; }
+        .keypad-btn { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); border: none; border-radius: 16px; padding: 20px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 500; font-family: var(--font-family-display); transition: background 0.2s; }
+        .keypad-btn:active { background: var(--md-sys-color-secondary-container); transform: scale(0.95); }
+        .keypad-btn.verify { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-size: 18px; font-weight: 600; }
+        .pin-display { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; margin-top: 16px; }
+        .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--md-sys-color-outline); transition: all 0.2s; }
+        .pin-dot.filled { background: var(--md-sys-color-primary); border-color: var(--md-sys-color-primary); transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -348,7 +357,39 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('directSignInModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="processDirectSignIn()">Sign In Directly</button>
+                <button class="btn btn-primary" onclick="processDirectSignIn()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reusable 2-Step Verification & Change PIN Keypad Modal -->
+    <div id="pinVerificationModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="modal-header" style="border-bottom: none; justify-content: center; position: relative;">
+                <h2 class="modal-title" id="pinKeypadTitle" style="font-weight: 600;">Playcode PIN</h2>
+                <button class="modal-close" onclick="closeModal('pinVerificationModal')" style="position: absolute; right: 16px;"><span class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted text-sm" id="pinKeypadSubtitle" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: #FFB580 !important;">
+                    <span class="material-icons-round" style="font-size:16px;">info</span> Never enter your PIN to receive money
+                </p>
+                <div class="pin-display" id="pinDisplay">
+                    <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+                </div>
+                <div class="keypad-container">
+                    <button class="keypad-btn" onclick="addPinDigit(1)">1</button>
+                    <button class="keypad-btn" onclick="addPinDigit(2)">2</button>
+                    <button class="keypad-btn" onclick="addPinDigit(3)">3</button>
+                    <button class="keypad-btn" onclick="addPinDigit(4)">4</button>
+                    <button class="keypad-btn" onclick="addPinDigit(5)">5</button>
+                    <button class="keypad-btn" onclick="addPinDigit(6)">6</button>
+                    <button class="keypad-btn" onclick="addPinDigit(7)">7</button>
+                    <button class="keypad-btn" onclick="addPinDigit(8)">8</button>
+                    <button class="keypad-btn" onclick="addPinDigit(9)">9</button>
+                    <button class="keypad-btn" onclick="removePinDigit()"><span class="material-icons-round" style="font-size: 28px;">backspace</span></button>
+                    <button class="keypad-btn" onclick="addPinDigit(0)">0</button>
+                    <button class="keypad-btn verify" onclick="handlePinSubmit()">Verify</button>
+                </div>
             </div>
         </div>
     </div>
@@ -532,6 +573,7 @@
                             <div class="dropdown-item" onclick="showManageAccount()"><span class="material-icons-round">dashboard</span> <span>Dashboard Home</span></div>
                             <div class="dropdown-item" onclick="showMyOrders()"><span class="material-icons-round">receipt_long</span> <span>My Orders</span></div>
                             <div class="dropdown-item" onclick="showTransactionHistory()"><span class="material-icons-round">history</span> <span>Transaction History</span></div>
+                            <div class="dropdown-item" onclick="startChangePinFlow()"><span class="material-icons-round">password</span> <span>Change PIN</span></div>
                             <hr>
                             <div class="dropdown-item dropdown-signout" onclick="executeSignOut(event)"><span class="material-icons-round">logout</span> <span>Secure Sign Out</span></div>
                         </div>
@@ -694,6 +736,15 @@
                 <table>
                     <thead><tr><th>Account No</th><th>Full Name</th><th>Balance</th><th>Agent Code</th><th>Joined Date</th><th>Actions</th></tr></thead>
                     <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Admin view for locked accounts -->
+            <h2 class="section-title">Locked Accounts</h2>
+            <div class="table-container mb-6">
+                <table>
+                    <thead><tr><th>Account No</th><th>Full Name</th><th>Lock Expiry / Status</th><th>Actions</th></tr></thead>
+                    <tbody id="lockedUsersTable"></tbody>
                 </table>
             </div>
 
@@ -978,6 +1029,12 @@
         let fsTargetAcc = null;
         let fsTargetUser = null;
 
+        // 2-Step Verification & Change PIN Variables
+        let directSignInPin = '';
+        let pendingDirectUser = null;
+        let currentPinKeypadMode = 'directSignIn'; // 'directSignIn', 'changePinOld', 'changePinNew', 'changePinConfirm'
+        let newPinTemp = '';
+
         function formatINR(amount) {
             const roundedAmount = Math.round(Number(amount) || 0);
             return '₹' + roundedAmount.toLocaleString('en-IN');
@@ -1075,7 +1132,7 @@
         }
 
         // ==========================================
-        // AUTHENTICATION
+        // AUTHENTICATION & LOGIN ATTEMPT LIMITER
         // ==========================================
         function showDirectSignInModal() { document.getElementById('directSignInKey').value = ''; showModal('directSignInModal'); }
 
@@ -1087,7 +1144,7 @@
             closeModal('directSignInModal');
             
             const overlay = document.getElementById('globalLoadingOverlay');
-            document.getElementById('loadingStepsContainer').innerHTML = `<div class="loading-step active"><div class="step-icon"><span class="material-icons-round">flash_on</span></div><div><strong>Direct sign-in</strong><div style="font-size:12px;">2 seconds</div></div></div>`;
+            document.getElementById('loadingStepsContainer').innerHTML = `<div class="loading-step active"><div class="step-icon"><span class="material-icons-round">manage_search</span></div><div><strong>Locating Profile</strong><div style="font-size:12px;">Validating Key</div></div></div>`;
             overlay.classList.add('show');
             
             setTimeout(() => {
@@ -1099,14 +1156,149 @@
                             const nameFirst4 = user.fullName ? user.fullName.substring(0, 4).toLowerCase() : '';
                             if (nameFirst4 === namePart && (user.sarNo ? user.sarNo.slice(-2) : '') === sarLastTwo) foundUser = user;
                         });
+
                         if (foundUser) {
-                            currentUser = foundUser; 
-                            database.ref('users/' + foundUser.accNo).update({ lastLogin: new Date().toISOString() });
-                            showDashboard(); loadUserData(); initRealTimeListeners(); 
-                            showAnimatedToast(`Welcome back, ${foundUser.fullName}!`, 'success');
+                            const now = Date.now();
+                            if (foundUser.adminLocked) {
+                                showAnimatedToast(`Account locked by Admin due to multiple failed attempts.`, 'error');
+                                return;
+                            }
+                            if (foundUser.lockedUntil && now < foundUser.lockedUntil) {
+                                const mins = Math.ceil((foundUser.lockedUntil - now) / 60000);
+                                showAnimatedToast(`Account locked. Try again in ${mins} min(s).`, 'error');
+                                return;
+                            }
+
+                            // Trigger 2-Step Verification
+                            pendingDirectUser = foundUser;
+                            
+                            // Setup Modal for Direct Sign In Mode
+                            currentPinKeypadMode = 'directSignIn';
+                            directSignInPin = '';
+                            document.getElementById('pinKeypadTitle').innerText = "Write Playcode PIN";
+                            document.getElementById('pinKeypadSubtitle').innerHTML = `<span class="material-icons-round" style="font-size:16px;">info</span> Never enter your PIN to receive money`;
+                            document.querySelector('#pinVerificationModal .verify').innerText = "Verify";
+                            
+                            updatePinDisplay();
+                            showModal('pinVerificationModal');
                         } else { showAnimatedToast('No matching user found', 'error'); }
                     }).catch(error => showAnimatedToast(error.message, 'error'));
-            }, 2000);
+            }, 1000);
+        }
+
+        function startChangePinFlow() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+
+            currentPinKeypadMode = 'changePinOld';
+            directSignInPin = '';
+            document.getElementById('pinKeypadTitle').innerText = "Enter Current PIN";
+            document.getElementById('pinKeypadSubtitle').innerHTML = "To change your PIN, first verify your old PIN.";
+            document.querySelector('#pinVerificationModal .verify').innerText = "Next";
+            updatePinDisplay();
+            showModal('pinVerificationModal');
+        }
+
+        // Shared Keypad Functions
+        function addPinDigit(digit) {
+            if(directSignInPin.length < 4) {
+                directSignInPin += digit;
+                updatePinDisplay();
+            }
+        }
+        function removePinDigit() {
+            if(directSignInPin.length > 0) {
+                directSignInPin = directSignInPin.slice(0, -1);
+                updatePinDisplay();
+            }
+        }
+        function updatePinDisplay() {
+            const dots = document.querySelectorAll('#pinDisplay .pin-dot');
+            dots.forEach((dot, index) => {
+                if(index < directSignInPin.length) { dot.classList.add('filled'); } 
+                else { dot.classList.remove('filled'); }
+            });
+        }
+        
+        function handlePinSubmit() {
+            if(directSignInPin.length !== 4) return showAnimatedToast('Enter 4 digit PIN', 'warning');
+
+            if (currentPinKeypadMode === 'directSignIn') {
+                if(pendingDirectUser && pendingDirectUser.pin === directSignInPin) {
+                    closeModal('pinVerificationModal');
+                    
+                    database.ref('users/' + pendingDirectUser.accNo).update({ 
+                        lastLogin: new Date().toISOString(),
+                        failedAttempts: 0,
+                        lockCount: 0,
+                        lockedUntil: null,
+                        adminLocked: false
+                    });
+                    
+                    currentUser = pendingDirectUser;
+                    pendingDirectUser = null;
+                    showDashboard(); loadUserData(); initRealTimeListeners(); 
+                    showAnimatedToast(`Verified! Welcome back, ${currentUser.fullName}!`, 'success');
+                } else {
+                    // Update failedAttempts manually on our local object so it increments per click
+                    let failedAttempts = (pendingDirectUser.failedAttempts || 0) + 1;
+                    pendingDirectUser.failedAttempts = failedAttempts;
+
+                    if (failedAttempts >= 3) {
+                        // Lock Permanently for Admin
+                        database.ref('users/' + pendingDirectUser.accNo).update({
+                            failedAttempts: failedAttempts,
+                            adminLocked: true
+                        });
+                        closeModal('pinVerificationModal');
+                        showAnimatedToast('Account permanently locked due to 3 failed attempts. Contact Admin.', 'error');
+                        pendingDirectUser = null;
+                    } else {
+                        database.ref('users/' + pendingDirectUser.accNo).update({
+                            failedAttempts: failedAttempts
+                        });
+                        showAnimatedToast(`Incorrect PIN! ${3 - failedAttempts} attempt(s) left.`, 'error');
+                        directSignInPin = '';
+                        updatePinDisplay();
+                    }
+                }
+            } else if (currentPinKeypadMode === 'changePinOld') {
+                if(directSignInPin === currentUser.pin) {
+                    currentPinKeypadMode = 'changePinNew';
+                    directSignInPin = '';
+                    document.getElementById('pinKeypadTitle').innerText = "Enter New PIN";
+                    document.getElementById('pinKeypadSubtitle').innerHTML = "Enter a new 4-digit PIN.";
+                    updatePinDisplay();
+                } else {
+                    showAnimatedToast('Incorrect current PIN', 'error');
+                    directSignInPin = '';
+                    updatePinDisplay();
+                }
+            } else if (currentPinKeypadMode === 'changePinNew') {
+                newPinTemp = directSignInPin;
+                currentPinKeypadMode = 'changePinConfirm';
+                directSignInPin = '';
+                document.getElementById('pinKeypadTitle').innerText = "Confirm New PIN";
+                document.getElementById('pinKeypadSubtitle').innerHTML = "Re-enter your new PIN to confirm.";
+                document.querySelector('#pinVerificationModal .verify').innerText = "Confirm";
+                updatePinDisplay();
+            } else if (currentPinKeypadMode === 'changePinConfirm') {
+                if(directSignInPin === newPinTemp) {
+                    database.ref('users/' + currentUser.accNo).update({ pin: newPinTemp }).then(() => {
+                        currentUser.pin = newPinTemp;
+                        closeModal('pinVerificationModal');
+                        showAnimatedToast('PIN changed successfully', 'success');
+                    }).catch(e => showAnimatedToast(e.message, 'error'));
+                } else {
+                    showAnimatedToast('PINs do not match. Try again.', 'error');
+                    currentPinKeypadMode = 'changePinNew';
+                    directSignInPin = '';
+                    document.getElementById('pinKeypadTitle').innerText = "Enter New PIN";
+                    document.getElementById('pinKeypadSubtitle').innerHTML = "Enter a new 4-digit PIN.";
+                    document.querySelector('#pinVerificationModal .verify').innerText = "Next";
+                    updatePinDisplay();
+                }
+            }
         }
 
         function startSignInSequence() {
@@ -1118,11 +1310,63 @@
             btn.classList.add('btn-loading');
             
             database.ref('users/' + accNo).once('value').then(snapshot => {
-                if (snapshot.exists() && snapshot.val().sarNo === sarNo) {
-                    currentUser = snapshot.val(); 
-                    database.ref('users/' + accNo).update({ lastLogin: new Date().toISOString() });
-                    showDashboard(); loadUserData(); initRealTimeListeners(); 
-                    showAnimatedToast(`Welcome back!`, 'success');
+                if (snapshot.exists()) {
+                    const user = snapshot.val();
+                    const now = Date.now();
+
+                    if (user.adminLocked) {
+                        showAnimatedToast(`Account locked by Admin due to multiple failed attempts.`, 'error');
+                        btn.classList.remove('btn-loading');
+                        return;
+                    }
+
+                    if (user.lockedUntil && now < user.lockedUntil) {
+                        const mins = Math.ceil((user.lockedUntil - now) / 60000);
+                        showAnimatedToast(`Account locked. Try again in ${mins} min(s).`, 'error');
+                        btn.classList.remove('btn-loading');
+                        return;
+                    }
+
+                    if (user.sarNo === sarNo) {
+                        // Success Login
+                        database.ref('users/' + accNo).update({ 
+                            lastLogin: new Date().toISOString(),
+                            failedAttempts: 0,
+                            lockCount: 0,
+                            lockedUntil: null,
+                            adminLocked: false
+                        });
+                        currentUser = user; 
+                        showDashboard(); loadUserData(); initRealTimeListeners(); 
+                        showAnimatedToast(`Welcome back!`, 'success');
+                    } else {
+                        // Failed Login Attempt Limits
+                        let failedAttempts = (user.failedAttempts || 0) + 1;
+                        let lockCount = user.lockCount || 0;
+                        let lockedUntil = null;
+                        let adminLocked = user.adminLocked || false;
+
+                        if (failedAttempts >= 3) {
+                            lockCount += 1;
+                            if (lockCount >= 2) {
+                                adminLocked = true; // Lock completely instead of 24 hrs
+                                showAnimatedToast('Account permanently locked due to multiple failed attempts. Contact Admin.', 'error');
+                            } else {
+                                lockedUntil = now + (3 * 60 * 1000); // Lock 3 min
+                                showAnimatedToast('Account locked for 3 minutes.', 'error');
+                            }
+                            failedAttempts = 0; // Reset for next window after lock
+                        } else {
+                            showAnimatedToast(`Invalid details! ${3 - failedAttempts} attempt(s) left.`, 'error');
+                        }
+
+                        database.ref('users/' + accNo).update({
+                            failedAttempts: failedAttempts,
+                            lockCount: lockCount,
+                            lockedUntil: lockedUntil,
+                            adminLocked: adminLocked
+                        });
+                    }
                 } else { showAnimatedToast('Invalid details!', 'error'); }
             }).catch(e => showAnimatedToast(e.message, 'error')).finally(() => btn.classList.remove('btn-loading'));
         }
@@ -1331,7 +1575,51 @@
         function showAdminPanel() { document.getElementById('signinPage').style.display = 'none'; document.getElementById('adminPanel').style.display = 'block'; window.scrollTo(0, 0); }
         function showGenerateCodeModal() { document.getElementById('generateCodeAmount').value = ''; document.getElementById('generatedCodeDisplaySection').style.display = 'none'; showModal('adminGenerateCodeModal'); }
         function adminGenerateAgentCode() { const amount = parseFloat(document.getElementById('generateCodeAmount').value); if (!amount || amount < 10) return showAnimatedToast('Enter valid amount (Min 10)', 'error'); const code = 'PL0' + Math.floor(10000 + Math.random() * 90000); const codeData = { code: code, amount: amount, used: false, createdBy: 'admin', createdAt: new Date().toISOString() }; database.ref('agentCodes/' + code).set(codeData).then(() => { document.getElementById('generatedCodeResult').innerText = code; document.getElementById('generatedCodeDisplaySection').style.display = 'block'; showAnimatedToast('Code Generated successfully!', 'success'); }).catch(e => showAnimatedToast(e.message, 'error')); }
-        function loadAllUsers() { database.ref('users').once('value').then(snapshot => { const usersTable = document.getElementById('usersTable'); usersTable.innerHTML = ''; if (!snapshot.exists()) return usersTable.innerHTML = '<tr><td colspan="6" align="center">No users</td></tr>'; snapshot.forEach(c => { const user = c.val(); usersTable.innerHTML += `<tr><td>${user.accNo}</td><td>${user.fullName}</td><td class="text-success font-medium">${formatINR(user.balance||0)}</td><td>${user.agentCode}</td><td>${user.createdAt?new Date(user.createdAt).toLocaleDateString():'N/A'}</td><td><button class="action-btn action-btn-primary" onclick="showAdminBalanceModal('${user.accNo}')">Bal</button> <button class="action-btn action-btn-danger" onclick="deleteUser('${user.accNo}')">Del</button></td></tr>`; }); }); }
+        
+        function loadAllUsers() { 
+            database.ref('users').once('value').then(snapshot => { 
+                const usersTable = document.getElementById('usersTable'); 
+                const lockedUsersTable = document.getElementById('lockedUsersTable'); 
+                usersTable.innerHTML = ''; 
+                lockedUsersTable.innerHTML = '';
+                const now = Date.now();
+
+                if (!snapshot.exists()) {
+                    usersTable.innerHTML = '<tr><td colspan="6" align="center">No users</td></tr>';
+                    lockedUsersTable.innerHTML = '<tr><td colspan="4" align="center">No locked users</td></tr>';
+                    return; 
+                }
+                
+                let hasLocked = false;
+                snapshot.forEach(c => { 
+                    const user = c.val(); 
+                    usersTable.innerHTML += `<tr><td>${user.accNo}</td><td>${user.fullName}</td><td class="text-success font-medium">${formatINR(user.balance||0)}</td><td>${user.agentCode}</td><td>${user.createdAt?new Date(user.createdAt).toLocaleDateString():'N/A'}</td><td><button class="action-btn action-btn-primary" onclick="showAdminBalanceModal('${user.accNo}')">Bal</button> <button class="action-btn action-btn-danger" onclick="deleteUser('${user.accNo}')">Del</button></td></tr>`; 
+                
+                    if((user.lockedUntil && user.lockedUntil > now) || user.adminLocked) {
+                        hasLocked = true;
+                        let lockReason = user.adminLocked ? "Admin Locked (PIN)" : new Date(user.lockedUntil).toLocaleString();
+                        lockedUsersTable.innerHTML += `<tr><td>${user.accNo}</td><td>${user.fullName}</td><td class="text-error font-medium">${lockReason}</td><td><button class="action-btn action-btn-success" onclick="unlockUser('${user.accNo}')">Unlock</button></td></tr>`;
+                    }
+                }); 
+
+                if(!hasLocked) {
+                    lockedUsersTable.innerHTML = '<tr><td colspan="4" align="center">No locked users</td></tr>';
+                }
+            }); 
+        }
+        
+        function unlockUser(accNo) {
+            database.ref('users/' + accNo).update({
+                failedAttempts: 0,
+                lockCount: 0,
+                lockedUntil: null,
+                adminLocked: false
+            }).then(() => {
+                showAnimatedToast('Account unlocked successfully', 'success');
+                loadAllUsers();
+            });
+        }
+
         function loadAllOrders() { database.ref('orders').once('value').then(snapshot => { const ordersTable = document.getElementById('allOrdersTable'); ordersTable.innerHTML = ''; if (!snapshot.exists()) return; snapshot.forEach(c => { const order = c.val(); ordersTable.innerHTML += `<tr><td>${order.orderId}</td><td>${order.accNo}</td><td>${formatINR(order.amount)}</td><td>${new Date(order.date).toLocaleDateString()}</td><td>${order.status}</td><td><button class="action-btn action-btn-success" onclick="showOrderDetails('${order.orderId}')">Edit</button></td></tr>`; }); }); }
         function showAdminBalanceModal(accNo) { selectedUserId = accNo; database.ref('users/' + accNo).once('value').then(s => { const user = s.val(); document.getElementById('adminUserInfo').textContent = `User: ${user.fullName}`; document.getElementById('adminCurrentBalance').textContent = `Bal: ${formatINR(user.balance||0)}`; document.getElementById('adminBalanceAmount').value = ''; showModal('adminBalanceModal'); }); }
         function updateUserBalance() { const action = document.getElementById('balanceAction').value; const amount = parseFloat(document.getElementById('adminBalanceAmount').value); if(!amount) return; database.ref('users/'+selectedUserId).once('value').then(s => { let bal = s.val().balance||0; action === 'add' ? bal+=amount : bal-=amount; if(bal < 0) bal = 0; const updates={}; updates[`users/${selectedUserId}/balance`] = bal; return database.ref().update(updates); }).then(() => { loadAllUsers(); closeModal('adminBalanceModal'); showAnimatedToast('Balance Updated Successfully', 'success'); }); }
