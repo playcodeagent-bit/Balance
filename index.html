@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,7 +134,45 @@
         .logo { display: flex; align-items: center; gap: 12px; } 
         .logo-text { font-size: 20px; font-weight: 500; color: var(--md-sys-color-on-surface); }
         .header-actions { display: flex; align-items: center; gap: 16px; }
-        .notification-icon { color: var(--md-sys-color-on-surface-variant); cursor: pointer; display: flex; align-items: center; }
+        .notification-button { position: relative; width: 40px; height: 40px; border: none; border-radius: 50%; background: transparent; color: var(--md-sys-color-on-surface-variant); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s; }
+        .notification-button:hover { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
+        .notification-button .material-icons-round { font-size: 24px; }
+        .notification-badge { position: absolute; top: 4px; right: 4px; min-width: 16px; height: 16px; border-radius: 9999px; background: #F2B8B5; color: #111114; font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center; padding: 0 4px; }
+        .notification-panel { position: fixed; top: 76px; right: 24px; width: min(380px, calc(100vw - 32px)); max-height: min(70vh, 620px); background: var(--md-sys-color-surface-container); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--radius-xl); box-shadow: var(--shadow-3); z-index: 1700; display: none; overflow: hidden; }
+        .notification-panel.show { display: flex; flex-direction: column; animation: dropdownFade 0.2s ease; }
+        .notification-panel-header { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+        .notification-panel-title { font-size: 18px; font-weight: 600; color: white; }
+        .notification-panel-actions { display: flex; align-items: center; gap: 8px; }
+        .notification-panel-action { background: transparent; border: 1px solid var(--md-sys-color-outline-variant); color: var(--md-sys-color-on-surface-variant); border-radius: var(--radius-full); padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .notification-panel-action:hover { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); border-color: transparent; }
+        .notification-panel-close { background: transparent; border: none; color: var(--md-sys-color-on-surface-variant); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; }
+        .notification-panel-close:hover { background: var(--md-sys-color-surface-container-high); }
+        .notification-panel-body { overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .notification-empty-state { text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 28px 16px; }
+        .notification-empty-state .material-icons-round { font-size: 40px; margin-bottom: 10px; color: var(--md-sys-color-outline-variant); }
+        .notification-item { display: flex; gap: 12px; padding: 14px; border-radius: 18px; background: rgba(255,255,255,0.02); border: 1px solid transparent; }
+        .notification-item.unread { border-color: rgba(168, 199, 250, 0.35); background: rgba(168, 199, 250, 0.08); }
+        .notification-item-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+        .notification-item-icon .material-icons-round { font-size: 20px; }
+        .notification-item-content { flex: 1; min-width: 0; }
+        .notification-item-title { font-size: 15px; font-weight: 600; color: white; margin-bottom: 4px; }
+        .notification-item-message { font-size: 13px; color: var(--md-sys-color-on-surface-variant); line-height: 1.45; word-break: break-word; }
+        .notification-item-meta { margin-top: 8px; font-size: 11px; color: var(--md-sys-color-outline); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+        .notification-item-actions { margin-left: 8px; display: flex; align-items: flex-start; }
+        .notification-item-close { width: 30px; height: 30px; border: none; border-radius: 50%; background: transparent; color: var(--md-sys-color-on-surface-variant); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, color 0.2s; flex: 0 0 auto; }
+        .notification-item-close:hover { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
+        .notification-item-close .material-icons-round { font-size: 18px; }
+        .notification-icon-info { background: rgba(168, 199, 250, 0.12); color: var(--md-sys-color-primary); }
+        .notification-icon-service { background: rgba(20, 108, 46, 0.14); color: var(--md-sys-color-success); }
+        .notification-icon-transaction { background: rgba(251, 188, 4, 0.14); color: #FDD663; }
+        .notification-icon-warning { background: rgba(242, 184, 181, 0.14); color: #F2B8B5; }
+        .notification-icon-security { background: rgba(142, 145, 143, 0.16); color: #E2E2E2; }
+        .notification-icon-promo { background: rgba(215, 163, 246, 0.14); color: #D7A3F6; }
+        .notification-icon-success { background: rgba(129, 201, 149, 0.14); color: var(--md-sys-color-success); }
+        .push-notification-grid { display: grid; gap: 16px; }
+        .push-notification-recipient { display: grid; gap: 16px; }
+        .push-notification-users { display: none; }
+        .push-notification-users.show { display: block; }
 
         .user-menu { position: relative; }
         .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: #A8C7FA; color: #062E6F; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; cursor: pointer; }
@@ -551,7 +590,10 @@
                     <div class="logo-text">PlayCode <span class="text-muted" style="font-size: 16px; font-weight: 400;">Workspace</span></div>
                 </div>
                 <div class="header-actions">
-                    <span class="material-icons-round notification-icon">notifications_none</span>
+                    <button class="notification-button" type="button" onclick="toggleNotificationsPanel(event)">
+                        <span class="material-icons-round">notifications_none</span>
+                        <span id="notificationBadge" class="notification-badge">0</span>
+                    </button>
                     <div class="user-menu">
                         <div class="user-avatar" onclick="toggleUserMenu()" id="userAvatar"><span id="userInitial">U</span></div>
                         <div id="userDropdown" class="dropdown-menu">
@@ -578,6 +620,23 @@
                             <div class="dropdown-item dropdown-signout" onclick="executeSignOut(event)"><span class="material-icons-round">logout</span> <span>Secure Sign Out</span></div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notificationPanel" class="notification-panel" aria-hidden="true">
+            <div class="notification-panel-header">
+                <div class="notification-panel-title">Notifications</div>
+                <div class="notification-panel-actions">
+                    <button class="notification-panel-action" type="button" onclick="clearAllNotifications(event)">Clear All</button>
+                    <button class="notification-panel-close" type="button" onclick="closeNotificationsPanel(event)"><span class="material-icons-round">close</span></button>
+                </div>
+            </div>
+            <div id="notificationPanelBody" class="notification-panel-body">
+                <div class="notification-empty-state">
+                    <span class="material-icons-round">notifications_off</span>
+                    <h3>No notifications yet</h3>
+                    <p>New alerts from admin will appear here.</p>
                 </div>
             </div>
         </div>
@@ -726,6 +785,7 @@
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary btn-sm" onclick="showGenerateCodeModal()"><span class="material-icons-round" style="font-size:16px">vpn_key</span> Generate Code</button>
+                    <button class="btn btn-secondary btn-sm" onclick="showPushNotificationModal()"><span class="material-icons-round" style="font-size:16px">campaign</span> Push Notification</button>
                     <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()">Sign Out</button>
                 </div>
             </div>
@@ -925,6 +985,53 @@
         </div>
     </div>
 
+    <div id="adminPushNotificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">Push Notification</h2><button class="modal-close" onclick="closeModal('adminPushNotificationModal')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body">
+                <div class="push-notification-grid">
+                    <div class="form-group">
+                        <label class="form-label">Notification Title</label>
+                        <input type="text" id="pushNotificationTitle" class="form-control" placeholder="e.g. Transaction Alert">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notification Message</label>
+                        <textarea id="pushNotificationMessage" class="form-control" rows="4" placeholder="Type the notification message"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Icon Type</label>
+                        <select id="pushNotificationIcon" class="form-control">
+                            <option value="info">Info</option>
+                            <option value="service">Service</option>
+                            <option value="transaction">Transaction Alert</option>
+                            <option value="warning">Warning</option>
+                            <option value="security">Security</option>
+                            <option value="promo">Offer / Promo</option>
+                            <option value="success">Success</option>
+                        </select>
+                    </div>
+                    <div class="push-notification-recipient">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Send To</label>
+                            <select id="pushNotificationAudience" class="form-control" onchange="togglePushNotificationUserPicker()">
+                                <option value="all">All Users</option>
+                                <option value="single">Single User</option>
+                            </select>
+                        </div>
+                        <div id="pushNotificationUserPicker" class="push-notification-users form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Select User</label>
+                            <select id="pushNotificationUser" class="form-control"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('adminPushNotificationModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="sendPushNotification()">Send Notification</button>
+            </div>
+        </div>
+    </div>
+
     <div id="orderCodeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2 class="modal-title">Order Play Code</h2><button class="modal-close" onclick="closeModal('orderCodeModal')"><span class="material-icons-round">close</span></button></div>
@@ -1024,6 +1131,17 @@
         let currentRedeemCode = '';
         let upiTimerInterval;
         let myOrdersCache = {}; 
+        let currentNotifications = [];
+
+        const notificationIconMap = {
+            info: { icon: 'info', className: 'notification-icon-info' },
+            service: { icon: 'support_agent', className: 'notification-icon-service' },
+            transaction: { icon: 'receipt_long', className: 'notification-icon-transaction' },
+            warning: { icon: 'warning', className: 'notification-icon-warning' },
+            security: { icon: 'shield', className: 'notification-icon-security' },
+            promo: { icon: 'campaign', className: 'notification-icon-promo' },
+            success: { icon: 'check_circle', className: 'notification-icon-success' }
+        };
         
         // Forgot SAR Variables
         let fsTargetAcc = null;
@@ -1038,6 +1156,19 @@
         function formatINR(amount) {
             const roundedAmount = Math.round(Number(amount) || 0);
             return '₹' + roundedAmount.toLocaleString('en-IN');
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getNotificationMeta(iconType) {
+            return notificationIconMap[iconType] || notificationIconMap.info;
         }
 
         function showAnimatedToast(message, type = 'info', duration = 5000) {
@@ -1405,10 +1536,11 @@
         function showDashboard() { 
             document.getElementById('signinPage').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; 
             document.getElementById('myOrdersSection').style.display = 'none'; document.getElementById('transactionHistorySection').style.display = 'none'; document.getElementById('manageAccount').style.display = 'block'; 
+            loadUserNotifications(false);
             window.scrollTo(0, 0); 
         }
         function toggleUserMenu() { document.getElementById('userDropdown').classList.toggle('show'); }
-        function showManageAccount() { document.getElementById('myOrdersSection').style.display = 'none'; document.getElementById('transactionHistorySection').style.display = 'none'; document.getElementById('manageAccount').style.display = 'block'; toggleUserMenu(); }
+        function showManageAccount() { document.getElementById('myOrdersSection').style.display = 'none'; document.getElementById('transactionHistorySection').style.display = 'none'; document.getElementById('manageAccount').style.display = 'block'; loadUserNotifications(false); toggleUserMenu(); }
         function showMyOrders() { document.getElementById('manageAccount').style.display = 'none'; document.getElementById('transactionHistorySection').style.display = 'none'; document.getElementById('myOrdersSection').style.display = 'block'; loadUserOrders(); toggleUserMenu(); }
         function showTransactionHistory() { document.getElementById('manageAccount').style.display = 'none'; document.getElementById('myOrdersSection').style.display = 'none'; document.getElementById('transactionHistorySection').style.display = 'block'; loadTransactionHistory(); toggleUserMenu(); }
         
@@ -1447,6 +1579,212 @@
 
         function checkBalance() { showModal('balanceModal'); document.getElementById('balanceLoading').style.display = 'flex'; document.getElementById('balanceResult').style.display = 'none'; setTimeout(() => { document.getElementById('balanceLoading').style.display = 'none'; document.getElementById('balanceResult').style.display = 'block'; document.getElementById('balanceAmount').textContent = formatINR(currentUser.balance); }, 2000); }
         function addBalance() { document.getElementById('addAmount').value = ''; showModal('addBalanceModal'); }
+        function toggleNotificationsPanel(event) {
+            if (event) event.stopPropagation();
+            const panel = document.getElementById('notificationPanel');
+            if (!panel) return;
+            const isOpen = panel.classList.contains('show');
+            if (isOpen) {
+                closeNotificationsPanel();
+                return;
+            }
+            loadUserNotifications(true);
+            panel.classList.add('show');
+            panel.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeNotificationsPanel(event) {
+            if (event) event.stopPropagation();
+            const panel = document.getElementById('notificationPanel');
+            if (!panel) return;
+            panel.classList.remove('show');
+            panel.setAttribute('aria-hidden', 'true');
+        }
+
+        function renderUserNotifications(notifications) {
+            const panelBody = document.getElementById('notificationPanelBody');
+            const badge = document.getElementById('notificationBadge');
+            if (!panelBody || !badge) return;
+
+            currentNotifications = notifications;
+            const unreadCount = notifications.filter(notification => !notification.read).length;
+            badge.textContent = unreadCount;
+            badge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+
+            if (!notifications.length) {
+                panelBody.innerHTML = `
+                    <div class="notification-empty-state">
+                        <span class="material-icons-round">notifications_off</span>
+                        <h3>No notifications yet</h3>
+                        <p>New alerts from admin will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            panelBody.innerHTML = notifications.map(notification => {
+                const meta = getNotificationMeta(notification.iconType);
+                const title = escapeHtml(notification.title || 'Notification');
+                const message = escapeHtml(notification.message || '');
+                const createdAt = notification.createdAt ? new Date(notification.createdAt).toLocaleString() : 'Just now';
+                const sender = escapeHtml(notification.senderLabel || 'Admin');
+                return `
+                    <div class="notification-item ${notification.read ? '' : 'unread'}">
+                        <div class="notification-item-icon ${meta.className}">
+                            <span class="material-icons-round">${meta.icon}</span>
+                        </div>
+                        <div class="notification-item-content">
+                            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                                <div class="notification-item-title" style="margin-bottom:0;">${title}</div>
+                                <div class="notification-item-actions">
+                                    <button class="notification-item-close" type="button" aria-label="Remove notification" onclick="removeNotification('${notification.id}', event)">
+                                        <span class="material-icons-round">close</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="notification-item-message">${message}</div>
+                            <div class="notification-item-meta">
+                                <span>${sender}</span>
+                                <span>${createdAt}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadUserNotifications(markAsRead = false) {
+            if (!currentUser) return;
+            database.ref('userNotifications/' + currentUser.accNo).once('value').then(snapshot => {
+                const notifications = [];
+                snapshot.forEach(childSnapshot => {
+                    const notification = childSnapshot.val();
+                    notifications.push({ id: childSnapshot.key, ...notification });
+                });
+                notifications.sort((left, right) => new Date(right.createdAt || 0) - new Date(left.createdAt || 0));
+                renderUserNotifications(notifications);
+
+                const unreadUpdates = {};
+                if (markAsRead) {
+                    notifications.forEach(notification => {
+                        if (!notification.read) unreadUpdates[`userNotifications/${currentUser.accNo}/${notification.id}/read`] = true;
+                    });
+                }
+                if (Object.keys(unreadUpdates).length) {
+                    database.ref().update(unreadUpdates).catch(() => {});
+                }
+            }).catch(() => {
+                renderUserNotifications([]);
+            });
+        }
+
+        function removeNotification(notificationId, event) {
+            if (event) event.stopPropagation();
+            if (!currentUser || !notificationId) return;
+            database.ref(`userNotifications/${currentUser.accNo}/${notificationId}`).remove().then(() => {
+                loadUserNotifications(false);
+            }).catch(e => showAnimatedToast(e.message, 'error'));
+        }
+
+        function clearAllNotifications(event) {
+            if (event) event.stopPropagation();
+            if (!currentUser) return;
+            if (!confirm('Clear all notifications?')) return;
+            database.ref(`userNotifications/${currentUser.accNo}`).remove().then(() => {
+                renderUserNotifications([]);
+                showAnimatedToast('Notifications cleared', 'success');
+            }).catch(e => showAnimatedToast(e.message, 'error'));
+        }
+
+        function refreshPushNotificationUsers() {
+            const userSelect = document.getElementById('pushNotificationUser');
+            if (!userSelect) return;
+            const users = Object.values(allUsersCache).sort((left, right) => (left.fullName || '').localeCompare(right.fullName || ''));
+            userSelect.innerHTML = users.length ? users.map(user => `<option value="${escapeHtml(user.accNo)}">${escapeHtml(user.fullName)} (${escapeHtml(user.accNo)})</option>`).join('') : '<option value="">No users available</option>';
+        }
+
+        function togglePushNotificationUserPicker() {
+            const audience = document.getElementById('pushNotificationAudience').value;
+            const userPicker = document.getElementById('pushNotificationUserPicker');
+            if (!userPicker) return;
+            userPicker.classList.toggle('show', audience === 'single');
+        }
+
+        function showPushNotificationModal() {
+            document.getElementById('pushNotificationTitle').value = '';
+            document.getElementById('pushNotificationMessage').value = '';
+            document.getElementById('pushNotificationIcon').value = 'info';
+            document.getElementById('pushNotificationAudience').value = 'all';
+            togglePushNotificationUserPicker();
+            if (!Object.keys(allUsersCache).length) {
+                database.ref('users').once('value').then(snapshot => {
+                    snapshot.forEach(childSnapshot => {
+                        const user = childSnapshot.val();
+                        if (user && user.accNo) allUsersCache[user.accNo] = user;
+                    });
+                    refreshPushNotificationUsers();
+                    showModal('adminPushNotificationModal');
+                }).catch(() => {
+                    refreshPushNotificationUsers();
+                    showModal('adminPushNotificationModal');
+                });
+                return;
+            }
+            refreshPushNotificationUsers();
+            showModal('adminPushNotificationModal');
+        }
+
+        function sendPushNotification() {
+            const title = document.getElementById('pushNotificationTitle').value.trim();
+            const message = document.getElementById('pushNotificationMessage').value.trim();
+            const iconType = document.getElementById('pushNotificationIcon').value;
+            const audience = document.getElementById('pushNotificationAudience').value;
+            const selectedUser = document.getElementById('pushNotificationUser').value;
+
+            if (!title || !message) return showAnimatedToast('Add a title and message', 'error');
+            if (audience === 'single' && !selectedUser) return showAnimatedToast('Select a user', 'error');
+
+            const notificationId = 'NTF' + Date.now();
+            const baseNotification = {
+                id: notificationId,
+                title,
+                message,
+                iconType,
+                createdAt: new Date().toISOString(),
+                senderLabel: 'Admin',
+                read: false,
+                audience
+            };
+
+            const writeNotification = (userIds) => {
+                const updates = {};
+                userIds.forEach(accNo => {
+                    updates[`userNotifications/${accNo}/${notificationId}`] = { ...baseNotification, targetAccNo: accNo };
+                });
+                return database.ref().update(updates);
+            };
+
+            if (audience === 'single') {
+                writeNotification([selectedUser]).then(() => {
+                    closeModal('adminPushNotificationModal');
+                    showAnimatedToast('Notification sent to user', 'success');
+                }).catch(e => showAnimatedToast(e.message, 'error'));
+                return;
+            }
+
+            database.ref('users').once('value').then(snapshot => {
+                const userIds = [];
+                snapshot.forEach(childSnapshot => {
+                    const user = childSnapshot.val();
+                    if (user && user.accNo) userIds.push(user.accNo);
+                });
+                if (!userIds.length) throw new Error('No users found');
+                return writeNotification(userIds);
+            }).then(() => {
+                closeModal('adminPushNotificationModal');
+                showAnimatedToast('Notification sent to all users', 'success');
+            }).catch(e => showAnimatedToast(e.message, 'error'));
+        }
         function proceedToPaymentMethod() { const amount = parseFloat(document.getElementById('addAmount').value); if (!amount || amount < 10) return showAnimatedToast('Min deposit is ₹10', 'error'); paymentAmount = amount; document.getElementById('methodAmountDisplay').textContent = formatINR(amount); closeModal('addBalanceModal'); showModal('paymentMethodModal'); }
 
         function openUPIPayment() { closeModal('paymentMethodModal'); const upiString = encodeURIComponent(`upi://pay?pa=amitrakhi83@oksbi&pn=Playcode Agent&am=${paymentAmount}`); document.getElementById('upiQrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${upiString}`; document.getElementById('upiAmountText').innerText = formatINR(paymentAmount); document.getElementById('upiFinalAmountDisplay').innerText = formatINR(paymentAmount); document.getElementById('upiQrSection').style.display = 'block'; document.getElementById('upiFormSection').style.display = 'none'; document.getElementById('upiFooterSection').style.display = 'none'; document.getElementById('userUpiId').value = ''; document.getElementById('userUtrId').value = ''; showModal('upiPaymentModal'); let timeLeft = 60; document.getElementById('upiTimerDisplay').innerText = `60s`; clearInterval(upiTimerInterval); upiTimerInterval = setInterval(() => { timeLeft--; document.getElementById('upiTimerDisplay').innerText = `${timeLeft}s`; if (timeLeft <= 0) { clearInterval(upiTimerInterval); document.getElementById('upiQrSection').style.display = 'none'; document.getElementById('upiFormSection').style.display = 'block'; document.getElementById('upiFooterSection').style.display = 'flex'; } }, 1000); }
@@ -1464,7 +1802,7 @@
         function searchUsers() { const searchTerm = document.getElementById('friendAccNo').value.trim(); const searchResults = document.getElementById('searchResults'); if (searchTerm.length < 2) { searchResults.style.display = 'none'; document.getElementById('friendInfo').style.display = 'none'; return; } searchResults.innerHTML = ''; if (Object.keys(allUsersCache).length > 0) { displaySearchResults(Object.values(allUsersCache).filter(user => user.accNo.includes(searchTerm) || user.fullName.toLowerCase().includes(searchTerm.toLowerCase()))); } else { database.ref('users').once('value').then(snapshot => { snapshot.forEach(childSnapshot => { const user = childSnapshot.val(); allUsersCache[user.accNo] = user; }); displaySearchResults(Object.values(allUsersCache).filter(user => user.accNo.includes(searchTerm) || user.fullName.toLowerCase().includes(searchTerm.toLowerCase()))); }).catch(e => showAnimatedToast('Error: ' + e.message, 'error')); } }
         function displaySearchResults(users) { const searchResults = document.getElementById('searchResults'); if (users.length === 0) { searchResults.innerHTML = '<div class="search-result-item"><span class="text-muted">No users found</span></div>'; searchResults.style.display = 'block'; return; } users.forEach(user => { if (user.accNo === currentUser.accNo) return; const resultItem = document.createElement('div'); resultItem.className = 'search-result-item'; resultItem.innerHTML = `<div class="user-avatar-small">${user.fullName.charAt(0).toUpperCase()}</div><div><div class="font-medium">${user.fullName}</div><div class="text-xs text-muted">${user.accNo}</div></div>`; resultItem.onclick = () => { document.getElementById('friendAccNo').value = user.accNo; document.getElementById('friendName').textContent = `${user.fullName} (${user.accNo})`; document.getElementById('friendInfo').style.display = 'block'; document.getElementById('searchResults').style.display = 'none'; updateTransferSummary(); }; searchResults.appendChild(resultItem); }); searchResults.style.display = 'block'; }
         function updateTransferSummary() { const amount = parseFloat(document.getElementById('transferAmount').value) || 0; if(document.getElementById('balanceAfterTransfer')){ document.getElementById('balanceAfterTransfer').textContent = formatINR(Math.max(0, (currentUser.balance || 0) - amount)); } }
-        function processTransfer() { const friendAccNo = document.getElementById('friendAccNo').value.trim(); const amount = parseFloat(document.getElementById('transferAmount').value); const pin = document.getElementById('transferPin').value; if (!friendAccNo || !amount || amount <= 0 || pin !== currentUser.pin) return showAnimatedToast('Fill correctly', 'error'); if (friendAccNo === currentUser.accNo) return showAnimatedToast('Self transfer not allowed', 'error'); if (amount > (currentUser.balance || 0)) return showAnimatedToast('Insufficient!', 'error'); database.ref('users/' + friendAccNo).once('value').then(snapshot => { if (!snapshot.exists()) return Promise.reject('User not found'); const friend = snapshot.val(); const timestamp = Date.now(); const senderNewBalance = (currentUser.balance || 0) - amount; const receiverNewBalance = (friend.balance || 0) + amount; const updates = {}; updates[`users/${currentUser.accNo}/balance`] = senderNewBalance; updates[`users/${friendAccNo}/balance`] = receiverNewBalance; updates[`transactions/TX${timestamp}S`] = { transactionId: `TX${timestamp}S`, accNo: currentUser.accNo, type: 'transfer_out', amount, description: `To ${friend.fullName}`, date: new Date().toISOString(), balanceAfter: senderNewBalance }; updates[`transactions/TX${timestamp}R`] = { transactionId: `TX${timestamp}R`, accNo: friendAccNo, type: 'transfer_in', amount, description: `From ${currentUser.fullName}`, date: new Date().toISOString(), balanceAfter: receiverNewBalance }; return database.ref().update(updates); }).then(() => { closeModal('payToFriendModal'); showAnimatedToast(`Sent ${formatINR(amount)} Successfully`, 'success'); }).catch(e => { if (e !== 'User not found') showAnimatedToast(e.message, 'error'); else showAnimatedToast(e, 'error'); }); }
+        function processTransfer() { const friendAccNo = document.getElementById('friendAccNo').value.trim(); const amount = parseFloat(document.getElementById('transferAmount').value); const pin = document.getElementById('transferPin').value; if (!friendAccNo || !amount || amount <= 0 || pin !== currentUser.pin) return showAnimatedToast('Fill correctly', 'error'); if (friendAccNo === currentUser.accNo) return showAnimatedToast('Self transfer not allowed', 'error'); if (amount > (currentUser.balance || 0)) return showAnimatedToast('Insufficient!', 'error'); database.ref('users/' + friendAccNo).once('value').then(snapshot => { if (!snapshot.exists()) return Promise.reject('User not found'); const friend = snapshot.val(); const timestamp = Date.now(); const transferTime = new Date(timestamp).toLocaleString(); const senderNewBalance = (currentUser.balance || 0) - amount; const receiverNewBalance = (friend.balance || 0) + amount; const notificationId = `NTF${timestamp}`; const senderNotificationId = `NTF${timestamp}S`; const updates = {}; updates[`users/${currentUser.accNo}/balance`] = senderNewBalance; updates[`users/${friendAccNo}/balance`] = receiverNewBalance; updates[`transactions/TX${timestamp}S`] = { transactionId: `TX${timestamp}S`, accNo: currentUser.accNo, type: 'transfer_out', amount, description: `To ${friend.fullName}`, date: new Date().toISOString(), balanceAfter: senderNewBalance }; updates[`transactions/TX${timestamp}R`] = { transactionId: `TX${timestamp}R`, accNo: friendAccNo, type: 'transfer_in', amount, description: `From ${currentUser.fullName}`, date: new Date().toISOString(), balanceAfter: receiverNewBalance }; updates[`userNotifications/${friendAccNo}/${notificationId}`] = { id: notificationId, title: 'Money Received', message: `${currentUser.fullName} sent you ${formatINR(amount)} at ${transferTime}.`, iconType: 'transaction', createdAt: new Date().toISOString(), senderLabel: currentUser.fullName, read: false, audience: 'single', targetAccNo: friendAccNo }; updates[`userNotifications/${currentUser.accNo}/${senderNotificationId}`] = { id: senderNotificationId, title: 'Transfer Sent', message: `You sent ${formatINR(amount)} to ${friend.fullName} at ${transferTime}.`, iconType: 'transaction', createdAt: new Date().toISOString(), senderLabel: 'System', read: false, audience: 'single', targetAccNo: currentUser.accNo }; return database.ref().update(updates); }).then(() => { closeModal('payToFriendModal'); showAnimatedToast(`Sent ${formatINR(amount)} Successfully`, 'success'); }).catch(e => { if (e !== 'User not found') showAnimatedToast(e.message, 'error'); else showAnimatedToast(e, 'error'); }); }
 
         function filterTransactions(type) { transactionFilter = type; document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); loadTransactionHistory(); }
 
@@ -1646,6 +1984,9 @@
             const dropdown = document.getElementById('userDropdown');
             const userAvatar = document.querySelector('.user-avatar'); 
             if (dropdown && dropdown.classList.contains('show') && !dropdown.contains(event.target) && !userAvatar.contains(event.target)) { dropdown.classList.remove('show'); }
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationButton = document.querySelector('.notification-button');
+            if (notificationPanel && notificationPanel.classList.contains('show') && !notificationPanel.contains(event.target) && (!notificationButton || !notificationButton.contains(event.target))) { closeNotificationsPanel(); }
             const searchResults = document.getElementById('searchResults'); 
             if (searchResults && searchResults.style.display !== 'none' && !event.target.closest('.user-search')) { searchResults.style.display = 'none'; }
         });
